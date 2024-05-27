@@ -26,27 +26,63 @@ def get_dataset():
 
    
 def transform_data_to_ts(dataset, target):
+    target = target_cleaned(target)
     dataset['Fecha'] = pd.to_datetime(dataset['Fecha'], format='%d/%m/%Y')
+    month_prct_estimation = month_prct_target_estimation(dataset.copy(), target)
     dataset['Year'] = dataset['Fecha'].dt.year
     dataset['Month'] = dataset['Fecha'].dt.month
-    target = target_cleaned(target)
     ts = dataset.groupby(['Year', 'Month']).agg({target: 'sum'})
     dates = get_dates(ts.index[0][0], ts.index[-1][0],
                       ts.index[0][1], ts.index[-1][1]) # [0] = year, [1] month
     ts.set_index(dates, inplace = True)
     ts['date'] = ts.index
     ts.reset_index(drop = True,inplace = True) 
-
     if target == "Compras":
         #because there are no purchases in the first month of september since the first data is on day 25
         ts.iloc[0,0] = ts[(ts['date'].dt.month == 9) & (ts['date'].dt.year > 2017)]['Compras'].mean()
-        # Last month Ventas/compras logic here
 
     ts = change_order_columns(ts)
-         
+    ts = set_estimation_logic(ts, target, month_prct_estimation)   
+    ts[target] = ts[target].round(2).astype('float32')
     return ts 
 
+def month_prct_target_estimation(dataset, target):
+    actual_day, actual_month, actual_year = get_actual_date_target(dataset, target)
+    prct_estimation = get_target_prct_estimation(dataset, target, actual_day, actual_month, actual_year)
+    return prct_estimation
 
+def get_filtered_target(target):
+    filter_condition = {'Compras': '600',
+                        'Ventas':'700'}
+    return filter_condition[target]
+
+def get_actual_date_target(dataset, target):
+    actual_day = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]\
+        .tail(1)['Fecha'].iloc[0].day
+    actual_month = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]\
+        .tail(1)['Fecha'].iloc[0].month
+    actual_year = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]\
+        .tail(1)['Fecha'].iloc[0].year
+    return actual_day, actual_month, actual_year
+
+def  get_target_prct_estimation(dataset, target, actual_day, actual_month, actual_year):
+    LIMIT_DAY = 10
+    dataset = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]
+    if actual_day < LIMIT_DAY:
+        return -1
+    else:
+        total_sum_month = get_total_sum_month(dataset, target, actual_month, actual_year)
+        total_sum_day = get_total_sum_day(dataset, target, actual_day,  actual_month, actual_year)
+        prct_rounded = round(total_sum_day/total_sum_month,2)
+        return prct_rounded
+
+def get_total_sum_month(dataset, target, actual_month, actual_year):
+    return dataset[(dataset['Fecha'].dt.year < actual_year) & (dataset['Fecha'].dt.month == actual_month)][target].sum()
+
+def get_total_sum_day(dataset, target, actual_day, actual_month, actual_year):
+    return dataset[(dataset['Fecha'].dt.year < actual_year) & (dataset['Fecha'].dt.month == actual_month) & (dataset['Fecha']\
+                    .dt.day <= actual_day)][target].sum()
+    
 def target_cleaned(target):
     target = target.lower()
     if target == 'ventas':
@@ -54,7 +90,7 @@ def target_cleaned(target):
     elif target =='compras':
         return 'Compras'
     else:
-        raise ValueError('Incorrect target provided. Target can be either compras or ventas')
+        raise ValueError('Incorrect target provided. Target can be either compras or ventas.')
     
 def get_dates(start_year, end_year, start_month, end_month):
     month_days = {1:'31',
@@ -78,3 +114,11 @@ def get_dates(start_year, end_year, start_month, end_month):
 
 def change_order_columns(dataset):
     return dataset[[dataset.columns[1], dataset.columns[0]]]
+
+def set_estimation_logic(ts, target, prct_estimation):
+    if prct_estimation == -1:
+        ts = ts.iloc[:-1]
+    else:
+        ts.loc[ts.index[-1], target]= ts[target].iloc[-1] / prct_estimation
+
+    return ts

@@ -28,7 +28,7 @@ prog_bar = TFMProgressBar(enable_train_bar = False,
 #UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
-dagshub.init(repo_owner='JCOQUE', repo_name='TFGinso', mlflow=True)
+
 
 class MyTCN:
     def __init__(self, target):
@@ -132,6 +132,7 @@ class MyTCN:
         pred_df.rename(columns = {self.target:'pred'}, inplace = True)
         pred_df['pred'] = pred_df['pred'].round(2)
         pred_df.reset_index(inplace = True)
+        pred_df.loc[pred_df.index[0], 'pred'] = self.ts_df[self.ts_df.columns[1]].iloc[-1]
         return pred_df
     
     def save_predictions_to_csv(self, predictions, metric):
@@ -147,7 +148,7 @@ class MyTCN:
     
     def mlflow_connect(self):
         print('Connecting to mlflow...')
-        mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFGinso.mlflow')
+        mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
         mlflow.set_experiment(f'{self.target} TCN')
         
     def save_mlflow(self, input, output):
@@ -157,7 +158,7 @@ class MyTCN:
             with mlflow.start_run(run_name =f'{metric}'):
                 mlflow.set_tag('model_name', f'{self.model_name}_{metric}')
                 mlflow.set_tag('Time', f'{current_time}')
-                mlflow_dataset = mlflow.data.from_pandas(input.head(1))
+                mlflow_dataset = mlflow.data.from_pandas(input.head(1)) # since I log the schema with a row is enough
                 mlflow.log_input(mlflow_dataset, context = 'Input')
                 self.save_model_to_pickle(metric)
                 mlflow.log_artifact(f"pickle_models/{self.model_name}_{self.target}_{metric}.pkl",
@@ -193,6 +194,6 @@ class MyTCN:
 
         return None
 
-
+dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
 my_tcn = MyTCN(target='Compras')
 my_tcn.run()

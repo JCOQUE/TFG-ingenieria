@@ -15,13 +15,11 @@ from tfg_module import my_future as mf
 
 warnings.filterwarnings("ignore", category=UserWarning, module='mlflow.types.utils')
 
-
-
 # IMPORTANT!! These lines are needed for the following error when connecting to dagshub:
 #UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
-dagshub.init(repo_owner='JCOQUE', repo_name='TFGinso', mlflow=True)
+
 
 class MyXGBoost:
 
@@ -130,7 +128,7 @@ class MyXGBoost:
     
     def mlflow_connect(self):
         print('Connecting to mlflow...')
-        mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFGinso.mlflow')
+        mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
         mlflow.set_experiment(f'{self.target} XGBoost')
         
     def save_mlflow(self):
@@ -140,7 +138,7 @@ class MyXGBoost:
             with mlflow.start_run(run_name =f'{metric}'):
                 mlflow.set_tag('model_name', f'{self.model_name}_{metric}')
                 mlflow.set_tag('Time', f'{current_time}')
-                mlflow_dataset = mlflow.data.from_pandas(self.X.head(1))
+                mlflow_dataset = mlflow.data.from_pandas(self.X.head(1)) # since I log the schema with a row is enough
                 mlflow.log_input(mlflow_dataset, context = 'Training features')
                 signature = infer_signature(self.X, self.y)
                 #https://github.com/mlflow/mlflow/issues/9659
@@ -170,7 +168,8 @@ class MyXGBoost:
         self.save_mlflow()
 
         return None
-        
+
+dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
 my_xgboost = MyXGBoost(target = 'Compras')
 my_xgboost.run()
 

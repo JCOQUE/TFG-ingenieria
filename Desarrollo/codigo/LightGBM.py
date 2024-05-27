@@ -20,7 +20,7 @@ warnings.filterwarnings("ignore", category=UserWarning, module='mlflow.types.uti
 #UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
-dagshub.init(repo_owner='JCOQUE', repo_name='TFGinso', mlflow=True)
+
 
 class MyLightGBM:
 
@@ -137,7 +137,7 @@ class MyLightGBM:
     
     def mlflow_connect(self):
         print('Connecting to mlflow...')
-        mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFGinso.mlflow')
+        mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
         mlflow.set_experiment(f'{self.target} LightGBM')
 
     def save_mlflow(self):
@@ -147,7 +147,7 @@ class MyLightGBM:
             with mlflow.start_run(run_name =f'{metric}'):
                 mlflow.set_tag('model_name', f'{self.model_name}_{metric}')
                 mlflow.set_tag('Time', f'{current_time}')
-                mlflow_dataset = mlflow.data.from_pandas(self.X.head(1))
+                mlflow_dataset = mlflow.data.from_pandas(self.X.head(1)) # since I log the schema with a row is enough
                 mlflow.log_input(mlflow_dataset, context = 'Training features')
                 signature = infer_signature(self.X, self.y)
                 mlflow.lightgbm.log_model(lgb_model = self.best_results.loc['model',metric], 
@@ -174,13 +174,13 @@ class MyLightGBM:
         predictions_rmse = self.make_predictions('best_RMSE')
         self.save_prediction_to_csv(predictions_rmse, 'best_RMSE')
 
-        self.mlflow_connect()
-        self.save_mlflow()
+        # self.mlflow_connect()
+        # self.save_mlflow()
 
         return None
         
-        
-my_lgbm = MyLightGBM(target = 'Compras')
+dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)        
+my_lgbm = MyLightGBM(target = 'Ventas')
 my_lgbm.run()
 
         

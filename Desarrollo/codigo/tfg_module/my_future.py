@@ -20,6 +20,11 @@ def get_pred_df(ts, model, informer = False):
     df = pd.DataFrame()
     df['date'] = get_future_dates(ts)
     df['pred'] = np.around(model.predict(X_pred),2)
+    df = concatante_past_future_values(ts, df)
+    return df
+
+def concatante_past_future_values(ts, df):
+    df.loc[df.index[0], 'pred'] = ts[ts.columns[1]].iloc[-1]
     return df
 
 def save_pred_plot(model_name, ts, df_pred, metric):

@@ -12,7 +12,6 @@ from sklearn.model_selection import GridSearchCV
 from torch.utils.data import DataLoader, TensorDataset
 import mlflow
 import dagshub
-from airflow.decorators import dag, task
 import pickle
 import sys
 import io
@@ -207,7 +206,7 @@ class MyInformer:
     
     def mlflow_connect(self):
         print('Connecting to mlflow...')
-        mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFGinso.mlflow')
+        mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
         mlflow.set_experiment(f'{self.target} Informer')
 
     def save_mlflow(self):
@@ -248,18 +247,11 @@ class MyInformer:
         self.save_mlflow()
 
         return None
-@task  
-def hello_world():
-    print('hello world')
 
 
-if __name__ == "__main__":
-    # my_informer = MyInformer(target='Compras')
-    # my_informer.run()  
-    # dagshub.init(repo_owner='JCOQUE', repo_name='TFGinso', mlflow=True) 
-    print('hola')
-    hello_world()
+dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
+my_informer = MyInformer(target='Compras')
+my_informer.run()  
 
-        
 
-# ) as dag
+    
