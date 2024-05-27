@@ -187,7 +187,7 @@ class MyLightGBM:
         
 @flow
 def hello_world():
-    print('hello world')
+    return print('hello world')
 if __name__ == '__main__':
     print('hello')
     hello_world()
