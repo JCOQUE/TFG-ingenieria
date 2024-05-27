@@ -1,0 +1,384 @@
+\documentclass[12pt, a4paper, twoside]{article} %twoside is for fancyhdr
+
+
+
+\usepackage{lipsum}
+\usepackage{geometry} % page margins
+	\geometry{top = 3.5cm, bottom = 3cm, left = 2cm, right = 2cm, headsep = 1.4cm, footskip = 1.5cm}
+\usepackage[skip = 7pt, indent = 0pt]{parskip} % paragraph settings
+%  package is very important. Is removing the default indentation that LaTeX
+% has when creating a new paragraph and also set more space between paragraphs.
+\usepackage{titlesec}
+%first parameter to set specific indentation to each section
+%second and third paarmeters to set before and after spacing
+% in section, subsection y subsubsection
+	\titlespacing\section{0pt}{0.6cm}{0.6cm}
+	\titlespacing\subsection{0pt}{0.5cm}{0.5cm}
+	\titlespacing\subsubsection{0pt}{12pt plus 4pt minus 2pt}{5pt plus 2pt minus 2pt}
+
+
+% Define a custom heading for the fourth level
+\newcommand{\subsubsubsection}[1]{\paragraph{#1}\mbox{}\\} %now I do have subsubsubsubsection
+\setcounter{secnumdepth}{4} % how many sectioning levels to assign numbers to
+\setcounter{tocdepth}{4} % Enable numbering for up to the fourth level
+%\usepackage{fontspec}%font-family
+	%\setmainfont{Verdana} %FALSE POSITIVE ERROR
+
+\usepackage{times}
+
+\usepackage{amsmath,amsfonts,amsthm, amssymb} % Para poder usar \mathbb
+	\numberwithin{equation}{subsection} %this numbers the equatino along with the subsections
+\usepackage{cancel} %to cancel numbers in  equations
+\usepackage{mathtools} %to annotate brackets in equations
+
+\usepackage{microtype} %improves the justification of the text
+\usepackage{makeidx}
+
+\usepackage{graphicx}
+	\graphicspath{ {./imgs/} }
+\counterwithin{figure}{section}%figure number along with the section
+\usepackage{subfigure} % for subfigures
+\usepackage{wrapfig} % to wrap a figure among text
+\usepackage{caption} % caption management in figures and tables
+\captionsetup[figure]{name=Figura}%default name is figure
+\usepackage{float} % for H command in figures and tables
+\usepackage{listings}
+\lstset{
+	language=Python,
+	basicstyle=\ttfamily\small,
+        keywordstyle=\bfseries\color{blue},
+	stringstyle=\color{orange!70!black},
+	commentstyle=\color{green!70!black},
+	showstringspaces=false,
+	frame=single,
+	breaklines=true,
+	captionpos=b
+}
+\usepackage{longtable} % Para tablas muy largas
+\usepackage{array} % for table's setting such as spacing within cells and 
+    \newcolumntype{?}{!{\vrule width 1.5pt}} % to make single vertical tables lines thicker
+% the border width
+\newcolumntype{s}{>{\columncolor{blue!15}} c} 
+
+\renewcommand{\arraystretch}{3} % top and bottom spacing	
+
+\usepackage[table]{xcolor}		   	
+\usepackage{multirow} % Para agrupar varias filas en las tablas
+\usepackage[most]{tcolorbox} % package to create color boxes  like the note box
+\usepackage{url}
+
+\usepackage{xcolor}  % color package to create colors. Additional table features added to xcolor package
+	\definecolor{azulos}{RGB}{66,145,253}
+	\definecolor{azulcl}{RGB}{232,243,255}
+	\definecolor{redos}{RGB}{255, 46, 46}
+	\definecolor{redcl}{RGB}{255, 200, 200}
+        \definecolor{morados}{RGB}{115, 91, 251}
+        \definecolor{moradmed}{RGB}{161, 144, 238}
+        \definecolor{moradcl}{RGB}{228, 223, 252}
+
+\usepackage{fancyhdr} % for cereating custom headers and footnotes
+	\fancypagestyle{plain}{ % este es un tipo de header y footer. Lo he llamado plain. 
+		\fancyhead{} % clear header
+	
+		\fancyhead[L]{\nouppercase\leftmark}
+		\fancyhead[RE]{\text{Trabajo Fin de Grado}}
+		\fancyhead[RO]{\text{Analítica aplicada a contabilidad empresarial}}
+		\fancyfoot{} % clear footnote
+		\fancyfoot[RE]{\text{U-tad 2023-2024}} 
+		\fancyfoot[RO]{\text{MAIS}}
+		\fancyfoot[C]{\thepage}
+		\fancyfoot[L]{\text{Javier Coque}}
+		\renewcommand{\footrulewidth}{0.4pt}
+		}% default is 0pt
+
+
+	%Al igual que el estilo plain, puedo crearme otro llamado bocata y ponerlo como quiera
+	% llamando a pagestyle{plain} o pagestyle{bocata} activo uno u otro. Esto es útil por si
+	% quieres utilizar distintos headers en distintas páginas
+
+\usepackage[hidelinks]{hyperref} %links: internal & external	
+%\usepackage{setspace} %espaciado entre linesa
+	%\onehalfspacing
+\renewcommand{\baselinestretch}{1.4}% Otra manera de poner espaciado entre líneas más precisa
+\usepackage{enumitem} %for lists
+
+% Para las referencias (es necesario utilizar biber)
+%\usepackage{csquotes}
+\usepackage[backend = biber, style = apa]{biblatex}
+	%\DeclareLanguageMapping{spanish}{spanish-apa}
+	\addbibresource{biblio.bib} % Fichero donde se incluyen las referencias
+\usepackage{environ}
+\usepackage{tikz}
+\usetikzlibrary{shapes,arrows, positioning, angles, arrows.meta, quotes}
+\usepackage{pgfplots}
+\usepgfplotslibrary{fillbetween}
+\pgfplotsset{compat=1.17}
+\usetikzlibrary{patterns}
+\usepackage{textcomp} % Para poder escribir el símbolo de euro
+%\usepackage[T1]{fontenc}
+%\usepackage[utf8]{inputenc}
+%\usepackage{indentfirst}        % Sangrado de parrafos al estilo europeo
+%\usepackage{eurosym} % para poder usar el símbolo del euro con \euro {xx}
+% (the text is moved to the right)
+%\usepackage{wasysym} % Para \RHD en los bullets de segundo nivel
+\usetikzlibrary{trees}
+
+
+
+
+
+\newcommand{\ho}{$H_0$}
+\newcommand{\ha}{$H_A$}
+\newcommand{\Int}[2]{\displaystyle \int_{#1}^{#2}}
+\newcommand{\Sum}[2]{\displaystyle \sum_{#1}^{#2}}
+\newcommand{\Lim}[1]{\displaystyle \lim_{#1}}
+\newcommand{\Frac}[2]{\displaystyle \frac{#1}{#2}}
+\newcommand{\B}[1]{\textbf{#1}}
+\newcommand{\slas}{$\backslash$}
+\newcommand{\ti}{\emph} %ti stands for text italic
+\newcommand{\ul}{\underline}
+\newcommand{\fn}{\footnote}
+\newcommand{\fnm}{\footnotemark}
+\newcommand{\fnt}{\footnotetext}
+\setlength{\footnotesep}{\baselineskip}%increase spacing between footnotes
+
+\renewcommand{\arraystretch}{1.5}
+\renewcommand{\tablename}{Tabla} 
+\renewcommand{\qed}{\hfill\blacksquare}
+\renewcommand\labelenumi{\theenumi)}
+\makeatletter 
+\renewcommand{\@seccntformat}[1]{\csname the#1\endcsname\hspace{1ex}}
+\renewcommand\labelitemi{\raisebox{0.35ex}{\tiny$\bullet$}}
+\renewcommand{\labelitemii}{$\RHD$}
+\makeatletter
+\renewcommand\@makefntext[1]{\leftskip=2em\hskip-1em\@makefnmark#1}
+\makeatother
+\newcommand{\Var}{\mathrm{Var}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Cov}{\mathrm{Cov}}
+\newcommand{\Corr}{\mathrm{Corr}}
+\renewcommand{\contentsname}{Tabla de contenidos}%cambiar titulo de \listofcontents (contents por defecto)
+\renewcommand{\listfigurename}{Lista de Figuras}
+\renewcommand{\listtablename}{Lista de Tablas}
+
+
+\newenvironment{center_tab}{%
+	\begin{center}
+		\setlength{\arrayrulewidth}{0.5mm} % Gap before text starts (text is moved to 
+		% to the right)
+		\renewcommand{\arraystretch}{1.5} % top and bottom spacing
+		\begin{tabular}
+		}{%
+		\end{tabular}
+	\end{center}
+}
+
+\newtcolorbox{atencion}{
+	enhanced,
+	fonttitle=\sffamily\bfseries,
+	colbacktitle=redos,
+	coltitle=redos,
+	title=Atencion:,
+	colbacktitle=redcl,
+	boxrule=0pt,frame hidden,
+	borderline west={3pt}{0pt}{redos},
+	colback=redcl,
+	top = 10pt, %body margin
+	before title={\vspace*{5pt}}, %title margin
+	bottom = 8pt
+}
+
+\newtcolorbox{demo}[1]{
+	enhanced,
+	fonttitle=\sffamily\bfseries,
+	colbacktitle=morados,
+	coltitle=morados,
+	title= #1,
+	colbacktitle=moradcl,
+	boxrule=0pt,frame hidden,
+	borderline west={3pt}{0pt}{morados},
+	colback=moradcl,
+	top = 10pt, %body margin
+	before title={\vspace*{5pt}}, %title margin
+	bottom = 8pt
+}
+
+\newtcolorbox{teorema}[1]{
+	enhanced,
+	fonttitle=\sffamily\bfseries,
+	colbacktitle=moradcl,
+	coltitle=morados,
+	title= #1,
+	colbacktitle=moradcl,
+	title code={
+		\path[draw=morados,solid,line width=0.75mm]
+		([xshift=5mm]title.south west) -- ([xshift=0mm]title.south east);
+	},
+	boxrule=0pt,frame hidden,
+	borderline west={3pt}{0pt}{morados},
+	colback=moradcl,
+}
+
+\newtcolorbox{ejemplo}[1]{
+	enhanced,
+	breakable,
+	fonttitle=\sffamily\bfseries,
+	%colbacktitle=azulos,
+	coltitle=morados,
+	title=#1,
+	%colbacktitle=azulcl,
+	boxrule=0pt,frame hidden,
+	borderline west={3pt}{0pt}{morados},
+	colback=moradcl,
+}
+
+\newtcolorbox{ejemploDos}[1]{
+	enhanced,
+	fonttitle=\sffamily\bfseries,
+	colbacktitle=moradcl,
+	coltitle=morados,
+	title= #1,
+	colbacktitle=moradcl,
+	title code={
+		\path[draw=morados,solid,line width=0.75mm]
+		([xshift=5mm]title.south west) -- ([xshift=0mm]title.south east);
+	},
+	boxrule=0pt,frame hidden,
+	borderline west={3pt}{0pt}{morados},
+	colback=white,
+}
+
+
+\newtcolorbox{nota}{
+	enhanced,
+	fonttitle=\sffamily\bfseries,
+	%colbacktitle=azulos,
+	coltitle=morados,
+	title= Nota,
+	colbacktitle=moradcl,
+	boxrule=0pt,frame hidden,
+	%borderline west={3pt}{0pt}{azulos},
+	colback=white,
+}
+
+\newtcolorbox{mathbox}{
+	colback = white,
+	colframe = azulos,
+}
+
+
+\newenvironment{matheq}{%
+	\begin{center}%
+		\begin{mathbox}%
+		}{%
+		\end{mathbox}%
+	\end{center}%
+}
+
+\newenvironment{matheq2}{%
+	\begin{center}%
+		\tcbox[colback = azulcl, colframe = azulos]%
+	}{%
+	\end{center}%
+}
+% Establece la profundidad del índice y la numeración de las páginas
+
+
+% Para que el índice no sea clickable
+\makeatletter
+\let\Hy@linktoc\Hy@linktoc@none
+
+\makeatother
+% Para que no divida las palabras
+\pretolerance=10000
+
+
+
+% Para que se rellene con puntos el índice general
+%\renewcommand\cftchapdotsep{\cftdotsep}
+%\renewcommand\cftchapleader{\cftdotfill{\cftchapdotsep}}
+% Opciones de distancias con las enumeraciones
+%\setlist[itemize,1]{leftmargin=0.65cm,labelindent=0.0cm,labelsep=0.2cm}
+%\setlist[enumerate,1]{leftmargin=0.65cm,labelindent=0.0cm,labelsep=0.2cm}
+
+
+
+
+
+\pagestyle{plain} % setting our default header and footer that we set with
+                  % fancyhdr package
+
+\begin{document}
+
+% PORTADA
+\include{portada}
+\pagenumbering{arabic}
+
+
+% AGRADECIMIENTOS
+\include{agradecimientos}
+
+\newpage
+% ÍNDICE DE CONTENIDOS
+\setcounter{page}{1}
+
+\tableofcontents
+
+% ÍNDICE DE FIGURAS
+\clearpage
+\listoffigures
+
+%INDICE TABLAS
+\clearpage
+\listoftables
+
+% Abstract esá como input (y no como include como el resto) porque 
+% al no tener título propio (section) no se podía modificar el heading
+% ABSTRACT
+
+\input{abstract}
+
+
+% GLOSARIO
+\input{glosario}
+
+% NOTACIÓN
+\input{notacion}
+
+% SECCIŐN 1 - INTRODUCCIÓN
+\include{introduccion}
+
+
+% CAPÍTULO 2 - ESTADO DE LA CUESTIÓN
+\include{estado}
+
+
+% SECCIŐN 3 - ASPECTOS METODOLÓGICOS
+\include{aspectos}
+
+% SECCIŐN 4 - DESARROLLO DEL TRABAJO
+\include{desarrollo}
+
+
+% SECCIŐN 5 - CONCLUSIONES
+\include{conclusiones}
+
+\include{apendice}
+%\clearpage
+%\thispagestyle{empty}
+%\printindex \nocite{*}
+%\appendix
+\include{borrar}
+
+% REFERENCIAS
+\newpage{\pagestyle{empty}}
+\addcontentsline{toc}{section}{Referencias}
+%https://github.com/SantiPlanet/apalike
+
+\printbibliography[title = {Referencias}]
+
+
+
+
+
+\end{document}
