@@ -1,0 +1,19 @@
+conda create --name ENV_NAME python = 3.12
+conda activate ENV_NAME
+conda install pytorch torchvision torchaudio -c pytorch
+conda install jupyter
+pip install keras
+pip install tensorflow
+pip install xgboost
+pip install lightgbm
+pip install mlflow
+pip install numpy
+pip install pandas
+pip install matplotlib
+pip install torch
+pip install prefect
+pip install darts
+pip install azure-storage-blob
+pip install dagshub
+pip install apache-airflow
+#pip install chardet

@@ -1,0 +1,25 @@
+La idea sería que estos dashboard se publicasen en un workspace con otras personas pero para ello hay que pagar
+La grafica de  barrras de Zebra no se puede agrupar por meses/trimestres porque para ello hay que pagar
+Recordad que en la grafica scatter del dashboard, hay una opcion de clusteres que se activa yendo a los 3 puntitos de arriba a la izquierda
+agrupar por clusteres. Para deshabilitarlo en la propia figura, tiene campo de eje X, eje Y,... y leyenda. Ahi estará el campo de cluster y se puede pulsar en la x.
+Estoy es muy potente porque podría interesar hacerlo y de esta manera segmentar a los clientes y ver si tienen características en común y demas
+
+Recordar que tanto en la matriz de debe y haber de analisis como en la otra, se puede  personalizar el orden de las columnas, de mayor a menor o de menor a mayor. por defecto
+esta el orden de cuentas (100 financiacion, 200 inmovilizado, etc.)
+
+Defiende que todo se ha hecho con las mejores tecnicas de programación posibles: creacion de modulos para no repetir codigo, abstrarelo y hacerlo mas legible,
+refactorizacion de codigo haciendolo un codigo limpio y legible, no poner comentarios de mas, etc.
+
+Se ha cuidado hasta el detalle de los nombres de mlflow y del orden en el que se guardan las cosas. El orden de las funciones. Si se llaman al principio
+están arriba, si continuan la lectura, están abajo. Orden de los import de todo. Orden de los experimentos tambien
+
+rename de indices (model, parameters, score) para mejorar la lectura. Todo al detalle
+
+correcion de error de target. 
+
+Se han descartado las metricas rmse y mape por ser redundantes en la comparativa
+
+
+Mencionar que se estuvo mirando la herramienta de airflow como otro posible task orquestrations
+
+El tfg esta lleno de plus: transformers, codigo limpio, dagshub, etc
