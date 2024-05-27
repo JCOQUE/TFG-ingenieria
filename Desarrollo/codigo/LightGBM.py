@@ -5,6 +5,7 @@ from datetime import datetime
 import mlflow
 from mlflow.data.pandas_dataset import PandasDataset
 from mlflow.models.signature import infer_signature
+from prefect import flow
 import dagshub
 import sys
 import io
@@ -179,11 +180,17 @@ class MyLightGBM:
 
         return None
         
-dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)        
-my_lgbm = MyLightGBM(target = 'Ventas')
-my_lgbm.run()
+# dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)        
+# my_lgbm = MyLightGBM(target = 'Ventas')
+# my_lgbm.run()
 
         
+@flow
+def hello_world():
+    print('hello world')
+if __name__ == '__main__':
+    print('hello')
+    hello_world()
 
         
 
