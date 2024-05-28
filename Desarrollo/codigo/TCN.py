@@ -34,6 +34,9 @@ ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieri
 ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pred_plots'
 ABS_PATH_PICKLE_MODELS = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pickle_models'
 
+'''
+NOTE: In this same folder you have a .ipynb notebook where you can follow in an easier way the core of this code.
+'''
 
 class MyTCN:
     def __init__(self, target):
@@ -46,13 +49,27 @@ class MyTCN:
         self.mae_pred_df = None
 
     def setting_attributes(self):
+        '''
+        This function is in charge of getting the time series to 
+        work with and passes it to a TimeSeries object to work
+        with the TCN Darts library.
+        '''
         self.ts_df = mgts.get_ts(self.target)
         self.ts = TimeSeries.from_dataframe(self.ts_df.copy(), time_col='date', value_cols=[self.target])
     
     def get_train_test_index(self, ts):
+        '''
+        returns the index by which the time series is splitted in train 
+        and test.
+        '''
         return int(len(ts) * 0.8)
 
     def get_train_test(self):
+        '''
+        Since the library Darts has its own GridSearch method (it does not
+        use the GridSearchCV method from the library sklearn), instead of
+        cross validations, train test split is performed.
+        '''
         split_index = self.get_train_test_index(self.ts)
         train = self.ts[:split_index]
         test = self.ts[split_index:]
@@ -60,7 +77,10 @@ class MyTCN:
     
     
     def create_model(self):
-        #params will be overwritten by params_grid
+        '''
+        It  created a TCN model from the Darts library. The parameters
+        will be overwritten in the train function.
+        '''
         tcn_model = TCNModel(
             input_chunk_length=7,
             output_chunk_length=3,
@@ -70,6 +90,10 @@ class MyTCN:
     
     
     def get_param_grid(self):
+        '''
+        Return all possible parameters values that the GridSearchCV method 
+        must try with all possible combinations.
+        '''
         param_grid = dict(input_chunk_length = [4,8,12], 
                            output_chunk_length = [1, 2, 3],
                             n_epochs = [10],
@@ -86,6 +110,11 @@ class MyTCN:
     
     
     def train(self, train, test):
+        '''
+        Since the the .gridsearch method from Darts library cannot
+        track two metrics when training (like GridSearchCV from sklearn does),
+        two models are needed to train: one for MAE and another one for RMSE.
+        '''
         tcn_model = self.create_model()
         param_grid = self.get_param_grid()
         
@@ -101,6 +130,12 @@ class MyTCN:
     
 
     def save_best_results(self, train, test, mae_model, rmse_model):
+        '''
+        For all the results obtained in the training with GridSearch, this function
+        saves the model with best MAE metric, with its metrics, its parameters and its 
+        RMSE (other_metric_score). The same happens with the model with the best RMSE. 
+        This is saved in a dictionary called best_results. 
+        '''
         modelos = {'best_MAE':mae_model, 'best_RMSE': rmse_model}
         best_results = {}
         for metrica, MODELO in modelos.items():
@@ -119,15 +154,32 @@ class MyTCN:
 
     
     def best_results_to_df(self, best_results):
+        '''
+        This functions converts the results obtained in the function save_best_results
+        from a dictionary into a pandas DataFrame. Its columns are best_MAE and best RMSE.
+        Its rows, their associated model, parameters, their score and the other metric score.
+        '''
         self.best_results = pd.DataFrame(best_results)
         self.best_results.index = ['model', 'parameters', 'mae', 'rmse']
 
     def make_predictions(self, metric):
+        '''
+        With the best models saved in the function best_results_to_df, this function
+        is in charge of calling get_pred_df that makes the predictions and passes them to 
+        a pandas DataFrame. These predictions are 12 months ahead.
+        This function, unlike the others, does not use mf.get_pred_df function because
+        the library Darts is a bit different.
+        '''
         best_metric_model = self.best_results.loc['model',metric]
         predictions = best_metric_model.predict(n= 12, series = self.ts[:-1])
         return predictions
     
     def predictions_to_df(self, predictions):
+        '''
+        Since Darts is a bit different library from the other ones used for
+        the other models, an additional functions is needed to convert a 
+        Darts TimeSeries object into a pandas DataFrame.
+        '''
         pred_df = predictions.pd_dataframe()
         pred_df.columns.name = None # Needed because darts sets this name to component by default
         pred_df.rename(columns = {self.target:'pred'}, inplace = True)
@@ -137,6 +189,10 @@ class MyTCN:
         return pred_df
     
     def save_predictions_to_csv(self, predictions, metric):
+        '''
+        This function saves the predictions into a .csv that will be useful in 
+        the save_mlflow function to save them as an artifact in mflow.
+        '''
         if metric == 'best_MAE':
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
@@ -144,16 +200,33 @@ class MyTCN:
         mf.save_pred_plot(self.model_name, self.ts_df, predictions, metric) # it does not show the pred because plt.show() is commented.
 
     def get_current_time(self):
+        '''
+        This functions returns the current time to save this information 
+        along with the model in mlflow.
+        '''
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
     
     def init_mlflow_repository(self):
+        '''
+        Since I created a dagshub repository to run mlflow experiments in a non-local way,
+        this line of code connects or initializes this repository.
+        '''
         dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
     
     def mlflow_connect(self):
+        '''
+        This function sets where the experiments info (i.e. mlflow.<whatever> in the next function)
+        should be saved (in the dagshub repository initialized in the previous function). 
+        It also sets the experiment name.
+        '''
         mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
-        mlflow.set_experiment(f'{self.target} TCN v1')
+        mlflow.set_experiment(f' {self.target} TCN')
         
     def save_mlflow(self):
+        '''
+        This functions logs all the important information about the best models obtained
+        (for both MAE metric and RMSE metric) in mlflow.
+        '''
         current_time = self.get_current_time()
         for metric in self.best_results.columns:
             with mlflow.start_run(run_name =f'{metric}'):
@@ -173,10 +246,17 @@ class MyTCN:
                                     artifact_path = 'predictions')
 
     def save_model_to_pickle(self, metric):
+        '''
+        Since the TCN model from the Darts library is not a pytorch model, nor tensorflow,
+        sklearn and other predefined models that mlflow supports, it is needed to save is as a pickle.
+        '''
         with open(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl", "wb") as save_model:
             pickle.dump(self.best_results.loc['model', metric], save_model)
 
+
+# PREFECT CODE
 # Prefect, at the moment, does not allow to use tasks in a class method. 
+# That's why this redundant code needs to be made.
 @task(task_run_name = 'Setting attributes', log_prints = True, retries = 2)
 def set_attributes(tcn):
     print('Setting attributes...')

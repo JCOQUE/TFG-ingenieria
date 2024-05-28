@@ -32,6 +32,9 @@ ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieri
 ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pred_plots'
 ABS_PATH_PICKLE_MODELS = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pickle_models'
 
+'''
+NOTE: In this same folder you have a .ipynb notebook where you can follow in an easier way the core of this code.
+'''
 
 class InformerWrapper(BaseEstimator, RegressorMixin):
     '''
@@ -54,6 +57,9 @@ class InformerWrapper(BaseEstimator, RegressorMixin):
         self.model = None
 
     def create_model(self):
+        '''
+        This functions initializes the Informer model with its respective parameters.
+        '''
         self.model = Informer(
             enc_in=self.enc_in,
             dec_in=self.dec_in,
@@ -66,7 +72,19 @@ class InformerWrapper(BaseEstimator, RegressorMixin):
             freq=self.freq,
         )
 
+    def get_dataset(self, X, y):
+        '''
+        This function get a Tensor dataset needed for the batch_x batch_y split
+        in the training.
+        '''
+        dataset = TensorDataset(X, y)
+        dataset_batch = DataLoader(dataset, batch_size=12, shuffle=False)
+        return dataset_batch
+
     def fit(self, X, y):
+        '''
+        This function trains the Informer model.
+        '''
         self.create_model()
         criterion = torch.nn.MSELoss()
         optimizer = torch.optim.Adam(self.model.parameters(), lr=self.learning_rate)
@@ -82,13 +100,11 @@ class InformerWrapper(BaseEstimator, RegressorMixin):
                 optimizer.step()
 
         return self
-
-    def get_dataset(self, X, y):
-        dataset = TensorDataset(X, y)
-        dataset_batch = DataLoader(dataset, batch_size=12, shuffle=False)
-        return dataset_batch
-        
+  
     def predict(self, X):
+        '''
+        This functions predicts values 12 months ahead.
+        '''
         predictions = []
         with torch.no_grad():
             X = torch.unsqueeze(X, dim=0)  # Adding batch dimension
@@ -120,6 +136,10 @@ class MyInformer:
 
     
     def setting_attributes(self):
+        '''
+        This function is in charge of initializing the correct attributes
+        for the model. These are parameters that should not be changed.
+        '''
         self.ts = mgts.get_ts(self.target)
         self.X, self.y = mpd.create_features(self.ts.copy(), target=self.target, informer=True)
         self.seq_len = 12  # since it is montly data, use the past 12 values for prediction
@@ -131,6 +151,10 @@ class MyInformer:
         self.freq = 'M'
     
     def get_param_grid(self):
+        '''
+        Return all possible parameters values that the GridSearchCV method 
+        must try with all possible combinations.
+        '''
         param_grid = {
             'n_heads': [8],
             'dropout': [0.2],
@@ -141,9 +165,20 @@ class MyInformer:
         return param_grid
     
     def set_metrics(self):
+        '''
+        Sets the metrics that will be tracked during the training. In this case, 
+        negative MAE, and negative RMSE. Later on, in save_best_results functions, 
+        these metrics are converted to positive (i.e. how they should be).
+        '''
         self.metrics = ['neg_mean_absolute_error', 'neg_root_mean_squared_error']
 
     def define_model(self, param_grid):
+        '''
+        This functions creates the GridSearchCV object and the model, parameters and
+        metrics to track are passed. Also the number of cross validations (cv) that we 
+        want to split our data into for training. If an error arises, try other number of
+        cv.
+        '''
         model = GridSearchCV(estimator=InformerWrapper(enc_in=self.enc_in, dec_in=self.dec_in, c_out=self.c_out, 
                                                                      seq_len=self.seq_len, label_len=self.label_len, 
                                                                      out_len=self.pred_len), 
@@ -153,6 +188,10 @@ class MyInformer:
         return model
 
     def train(self):
+        '''
+        Once the model, its metrics to track and its possible parameters
+        to try, this function executes the training.
+        '''
         param_grid = self.get_param_grid()
         self.set_metrics()
         best_model_informer = self.define_model(param_grid)
@@ -162,9 +201,18 @@ class MyInformer:
         return best_model_informer
         
     def get_results(self, model):
+        '''
+        Returns the GridSearchCV results. It is a dictionary.
+        '''
         return model.cv_results_
 
     def save_best_results(self, results):
+        '''
+        For all the results obtained in the training with GridSearch, this function
+        saves the model with best MAE metric, with its metrics, its parameters and its 
+        RMSE (other_metric_score). The same happens with the model with the best RMSE. 
+        This is saved in a dictionary called best_results. 
+        '''
         best_results = {}
         for metric in self.metrics:
             best_index = results[f'rank_test_{metric}'].argmin()
@@ -183,17 +231,32 @@ class MyInformer:
         self.best_results_to_df(best_results)
 
     def best_results_to_df(self, best_results):
+        '''
+        This functions converts the results obtained in the function save_best_results
+        from a dictionary into a pandas DataFrame. Its columns are best_MAE and best RMSE.
+        Its rows, their associated model, parameters, their score and the other metric score.
+        '''
         self.best_results = pd.DataFrame(best_results)
-        self.best_results.rename(columns={'neg_mean_absolute_error': 'best_MAE', 'neg_root_mean_squared_error': 'best_RMSE'},
+        self.best_results.rename(columns={'neg_mean_absolute_error': 'best_MAE', 
+                                          'neg_root_mean_squared_error': 'best_RMSE'},
                                  inplace=True)
         self.best_results.index = ['model', 'parameters', 'mae', 'rmse']
 
     def make_predictions(self, metric):
+        '''
+        With the best models saved in the function best_results_to_df, this function
+        is in charge of calling get_pred_df that makes the predictions and passes them to 
+        a pandas DataFrame. These predictions are 12 months ahead.
+        '''
         best_metric_model = self.best_results.loc['model', metric]
         predictions = mf.get_pred_df(self.ts, best_metric_model, informer=True)
         return predictions
 
     def save_predictions_to_csv(self, predictions, metric):
+        '''
+        This function saves the predictions into a .csv that will be useful in 
+        the save_mlflow function to save them as an artifact in mflow.
+        '''
         if metric == 'best_MAE':
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
@@ -201,16 +264,33 @@ class MyInformer:
         mf.save_pred_plot(self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
 
     def get_current_time(self):
+        '''
+        This functions returns the current time to save this information 
+        along with the model in mlflow.
+        '''
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
     
     def init_mlflow_repository(self):
+        '''
+        Since I created a dagshub repository to run mlflow experiments in a non-local way,
+        this line of code connects or initializes this repository.
+        '''
         dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
     
     def mlflow_connect(self):
+        '''
+        This function sets where the experiments info (i.e. mlflow.<whatever> in the next function)
+        should be saved (in the dagshub repository initialized in the previous function). 
+        It also sets the experiment name.
+        '''
         mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
-        mlflow.set_experiment(f'{self.target} Informer v1')
+        mlflow.set_experiment(f' {self.target} Informer')
 
     def save_mlflow(self):
+        '''
+        This functions logs all the important information about the best models obtained
+        (for both MAE metric and RMSE metric) in mlflow.
+        '''
         current_time = self.get_current_time()
         for metric in self.best_results.columns:
             with mlflow.start_run(run_name =f'{metric}'):
@@ -228,13 +308,17 @@ class MyInformer:
 
                 
     def save_model_to_pickle(self, metric):
-        print('Hen entrado en pickle')
+        '''
+        Since the Informer model is not a pytorch model, nor tensorflow, sklearn and other
+        predefined models that mlflow supports, it is needed to save is as a pickle.
+        '''
         with open(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl", "wb") as save_model:
             pickle.dump(self.best_results.loc['model', metric], save_model)
 
 
-
+# PREFECT CODE
 # Prefect, at the moment, does not allow to use tasks in a class method. 
+# That's why this redundant code needs to be made.
 @task(task_run_name = 'Setting attributes', log_prints = True, retries = 2)
 def set_attributes(informer):
     print('Setting attributes...')
