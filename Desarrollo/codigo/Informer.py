@@ -231,9 +231,6 @@ class MyInformer:
                 
     def save_model_to_pickle(self, metric):
         print('Hen entrado en pickle')
-        print('adios')
-        print(type(self.best_results.loc['model', metric]))
-        print('hola')
         with open(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl", "wb") as save_model:
             pickle.dump(self.best_results.loc['model', metric], save_model)
 
