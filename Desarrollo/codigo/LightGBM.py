@@ -186,7 +186,7 @@ class MyLightGBM:
         
 @flow
 def hello_world():
-    return print('hello world')
+    return print('hello worldd')
 
 if __name__ == '__main__':
     # my_lgbm = MyLightGBM(target = 'Ventas')
