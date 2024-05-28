@@ -9,6 +9,7 @@ from prefect import flow, task
 import dagshub
 import sys
 import io
+import os
 import warnings
 
 from tfg_module import my_get_time_series as mgts
@@ -128,6 +129,7 @@ class MyLightGBM:
     
     def save_prediction_to_csv(self, predictions, metric):
         absolute_path = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo'
+        print(f'Current working directory: {os.getcwd()}')
         if metric == 'best_MAE':
             predictions.to_csv(f'{absolute_path}/csv_predictions/{self.model_name}_{self.target}_best_mae.csv')
         else:
