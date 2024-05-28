@@ -1,7 +1,7 @@
 import sys
 
 # Needed to use the Informer2020 modules
-sys.path.append('C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/models')
+sys.path.append('C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/Informer2021')
 
 import numpy as np
 import pandas as pd
@@ -17,7 +17,7 @@ import sys
 import io
 from datetime import datetime
 
-from models.model import Informer
+from Informer2021.model import Informer
 
 from tfg_module import my_get_time_series as mgts
 from tfg_module import my_process_data as mpd
@@ -216,7 +216,9 @@ class MyInformer:
             with mlflow.start_run(run_name =f'{metric}'):
                 mlflow.set_tag('model_name', f'{self.model_name}_{metric}')
                 mlflow.set_tag('Time', f'{current_time}')
+                print('Voy a salvar a pickle')
                 self.save_model_to_pickle(metric)
+                print('model salvado')
                 mlflow.log_artifact(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl",
                                     artifact_path="model")
                 mlflow.log_params(self.best_results.loc['parameters', metric])
@@ -228,6 +230,8 @@ class MyInformer:
 
                 
     def save_model_to_pickle(self, metric):
+        print('Hen entrado en pickle')
+        print(type(self.best_results.loc['model', metric]))
         with open(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl", "wb") as save_model:
             pickle.dump(self.best_results.loc['model', metric], save_model)
 
