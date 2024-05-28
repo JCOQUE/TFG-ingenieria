@@ -128,7 +128,7 @@ class MyLightGBM:
 
     
     def save_prediction_to_csv(self, predictions, metric):
-        absolute_path = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/csv/predictions'
+        absolute_path = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/csv_predictions'
         files = os.listdir(absolute_path)
         for item in files:
             print(item)
