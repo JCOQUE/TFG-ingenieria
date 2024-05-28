@@ -129,6 +129,9 @@ class MyLightGBM:
     
     def save_prediction_to_csv(self, predictions, metric):
         absolute_path = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo'
+        files = os.listdir(absolute_path)
+        for item in files:
+            print(item)
         print(f'Current working directory: {os.getcwd()}')
         if metric == 'best_MAE':
             predictions.to_csv(f'{absolute_path}/csv_predictions/{self.model_name}_{self.target}_best_mae.csv')
@@ -182,40 +185,40 @@ def train(lgbm):
     print('Training...')
     return lgbm.train() 
 
-@task(task_run_name = 'Get results', log_prints = True, retries = 2)
+@task(task_run_name = 'Get results', log_prints = True)
 def get_results(lgbm, best_model_lgbm):
     return lgbm.get_results(best_model_lgbm)  
 
-@task(task_run_name = 'Save best results', log_prints = True, retries = 2)
+@task(task_run_name = 'Save best results', log_prints = True)
 def save_best_results(lgbm, results):
     print('Saving best results...')
     lgbm.save_best_results(results)
 
-@task(task_run_name = 'Make predictions {model}', log_prints = True, retries = 2)
+@task(task_run_name = 'Make predictions {model}', log_prints = True)
 def make_predictions(lgbm, model):
     print(f'Making {model} predictions...')
     return lgbm.make_predictions(model)
 
-@task(task_run_name = 'Save predictions {model}', log_prints = True, retries = 2)
+@task(task_run_name = 'Save predictions {model}', log_prints = True)
 def save_prediction_to_csv(lgbm, predictions, model):
     print(f'Saving {model} predictions...')
     lgbm.save_prediction_to_csv(predictions, model)
 
-@task(task_run_name = 'Init mlflow repository', log_prints = True, retries = 2)
+@task(task_run_name = 'Init mlflow repository', log_prints = True)
 def init_mlflow_repository(lgbm):
     lgbm.init_mlflow_repository()
 
-@task(task_run_name = 'Connect to mlflow', log_prints = True, retries = 2)
+@task(task_run_name = 'Connect to mlflow', log_prints = True)
 def mlflow_connect(lgbm):
     print('Connecting to mlflow...')
     lgbm.mlflow_connect()
 
-@task(task_run_name = 'Save results to mlflow', log_prints = True, retries = 2)
+@task(task_run_name = 'Save results to mlflow', log_prints = True)
 def save_mlflow(lgbm):
     print('Saving to mlflow...')
     lgbm.save_mlflow()
  
-@flow(flow_run_name='LightGBM {target}', retries = 2, timeout_seconds = 3600)
+@flow(flow_run_name='LightGBM {target}')
 def run(target = 'Compras'):
         my_lgbm = MyLightGBM(target = target)
         set_attributes(my_lgbm)
