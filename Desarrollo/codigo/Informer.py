@@ -1,7 +1,7 @@
 import sys
 
 # Needed to use the Informer2020 modules
-sys.path.append('C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/Informer2021')
+sys.path.append('C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/Informer2020')
 
 import numpy as np
 import pandas as pd
@@ -17,7 +17,7 @@ import sys
 import io
 from datetime import datetime
 
-from Informer2021.model import Informer
+from Informer2020.model import Informer
 
 from tfg_module import my_get_time_series as mgts
 from tfg_module import my_process_data as mpd

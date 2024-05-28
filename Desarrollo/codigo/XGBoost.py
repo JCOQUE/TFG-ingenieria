@@ -4,6 +4,7 @@ from datetime import datetime
 from sklearn.model_selection import TimeSeriesSplit, GridSearchCV
 import mlflow
 from mlflow.models.signature import infer_signature
+from prefect import flow, task
 import dagshub
 import sys
 import io
@@ -20,6 +21,9 @@ warnings.filterwarnings("ignore", category=UserWarning, module='mlflow.types.uti
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
+ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/csv_predictions'
+ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/pred_plots'
+
 
 class MyXGBoost:
 
@@ -35,7 +39,6 @@ class MyXGBoost:
         self.best_results = None
 
     def setting_attributes(self):
-        print('Setting attributes...')
         self.ts = mgts.get_ts(self.target)
         self.X, self.y = mpd.create_features(self.ts.copy(), target = self.target, informer = False)
     
@@ -70,7 +73,6 @@ class MyXGBoost:
         return best_model
 
     def train(self):
-        print('Training....')
         model = self.create_model()
         param_grid = self.get_param_grid()
         cross_val_split = self.get_cross_validation()
@@ -87,7 +89,6 @@ class MyXGBoost:
         return model.cv_results_
     
     def save_best_results(self, results):
-        print('Saving results...')
         best_results = {}
         for metric in self.metrics:
             best_index = results[f'rank_test_{metric}'].argmin()
@@ -110,29 +111,29 @@ class MyXGBoost:
         self.best_results.index = ['model', 'parameters', 'mae', 'rmse'] 
 
     def make_predictions(self, metric):
-        print(f'Making {metric} predictions...')
         best_metric_model = self.best_results.loc['model', metric]
         predictions = mf.get_pred_df(self.ts, best_metric_model)
         return predictions
 
-    def save_prediction_to_csv(self, predictions, metric):
+    def save_predictions_to_csv(self, predictions, metric):
         print(f'Saving {metric} predictions...')
         if metric == 'best_MAE':
-            predictions.to_csv(f'csv_predictions/{self.model_name}_{self.target}_best_mae.csv')
+            predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
-            predictions.to_csv(f'csv_predictions/{self.model_name}_{self.target}_best_rmse.csv')
+            predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
         mf.save_pred_plot(self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
 
     def get_current_time(self):
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
     
+    def init_mlflow_repository(self):
+        dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True) 
+    
     def mlflow_connect(self):
-        print('Connecting to mlflow...')
         mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
-        mlflow.set_experiment(f'{self.target} XGBoost')
+        mlflow.set_experiment(f'{self.target} XGBoost v1')
         
     def save_mlflow(self):
-        print('Saving to mlflow...')
         current_time = self.get_current_time()
         for metric in self.best_results.columns:
             with mlflow.start_run(run_name =f'{metric}'):
@@ -148,33 +149,101 @@ class MyXGBoost:
                 mlflow.log_params(self.best_results.loc['parameters', metric])
                 mlflow.log_metric('MAE', self.best_results.loc['mae', metric])
                 mlflow.log_metric('RMSE', self.best_results.loc['rmse', metric])
-                mlflow.log_artifact(f'csv_predictions/{self.model_name}_{self.target}_{metric.lower()}.csv', artifact_path = 'predictions')
-                mlflow.log_artifact(f'pred_plots/{self.model_name} {self.target} Prediction {metric.upper()}.png',
+                mlflow.log_artifact(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_{metric.lower()}.csv', artifact_path = 'predictions')
+                mlflow.log_artifact(f'{ABS_PATH_PLOT}/{self.model_name} {self.target} Prediction {metric.upper()}.png',
                                     artifact_path="plots")
 
-    def run(self):
-        self.setting_attributes()
-        best_model_lgbm = self.train()
-        results = self.get_results(best_model_lgbm)
-        self.save_best_results(results)
+    # def run(self):
+    #     self.setting_attributes()
+    #     best_model_lgbm = self.train()
+    #     results = self.get_results(best_model_lgbm)
+    #     self.save_best_results(results)
 
-        predictions_mae = self.make_predictions('best_MAE')
-        self.save_prediction_to_csv(predictions_mae, 'best_MAE')
+    #     predictions_mae = self.make_predictions('best_MAE')
+    #     self.save_prediction_to_csv(predictions_mae, 'best_MAE')
         
-        predictions_rmse = self.make_predictions('best_RMSE')
-        self.save_prediction_to_csv(predictions_rmse, 'best_RMSE')
+    #     predictions_rmse = self.make_predictions('best_RMSE')
+    #     self.save_prediction_to_csv(predictions_rmse, 'best_RMSE')
 
-        self.mlflow_connect()
-        self.save_mlflow()
+    #     self.mlflow_connect()
+    #     self.save_mlflow()
+
+    #     return None
+
+# dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
+# my_xgboost = MyXGBoost(target = 'Compras')
+# my_xgboost.run()
+
+
+# Prefect, at the moment, does not allow to use tasks in a class method. 
+@task(task_run_name = 'Setting attributes', log_prints = True, retries = 2)
+def set_attributes(xgboost):
+    print('Setting attributes...')
+    xgboost.setting_attributes()
+
+@task(task_run_name = 'Train', log_prints = True, retries = 2)
+def train(xgboost):
+    print('Training...')
+    return xgboost.train() 
+
+@task(task_run_name = 'Get results', log_prints = True)
+def get_results(xgboost, best_model_xgboost):
+    return xgboost.get_results(best_model_xgboost)  
+
+@task(task_run_name = 'Save best results', log_prints = True)
+def save_best_results(xgboost, results):
+    print('Saving best results...')
+    xgboost.save_best_results(results)
+
+@task(task_run_name = 'Make predictions {model}', log_prints = True)
+def make_predictions(xgboost, model):
+    print(f'Making {model} predictions...')
+    return xgboost.make_predictions(model)
+
+@task(task_run_name = 'Save predictions {model}', log_prints = True)
+def save_predictions_to_csv(xgboost, predictions, model):
+    print(f'Saving {model} predictions...')
+    xgboost.save_predictions_to_csv(predictions, model)
+
+@task(task_run_name = 'Init mlflow repository', log_prints = True)
+def init_mlflow_repository(xgboost):
+    xgboost.init_mlflow_repository()
+
+@task(task_run_name = 'Connect to mlflow', log_prints = True)
+def mlflow_connect(xgboost):
+    print('Connecting to mlflow...')
+    xgboost.mlflow_connect()
+
+@task(task_run_name = 'Save results to mlflow', log_prints = True)
+def save_mlflow(xgboost):
+    print('Saving to mlflow...')
+    xgboost.save_mlflow()
+ 
+@flow(flow_run_name='XGBoost {target} p1')
+def run(target):
+        my_xgboost = MyXGBoost(target = target)
+        set_attributes(my_xgboost)
+
+        best_model_lgbm = train(my_xgboost)
+        results = get_results(my_xgboost, best_model_lgbm)
+        save_best_results(my_xgboost, results)
+
+        predictions_mae = make_predictions(my_xgboost, 'best_MAE')
+        save_predictions_to_csv(my_xgboost, predictions_mae, 'best_MAE')
+        
+        predictions_rmse = make_predictions(my_xgboost, 'best_RMSE')
+        save_predictions_to_csv(my_xgboost, predictions_rmse, 'best_RMSE')
+
+        init_mlflow_repository(my_xgboost)
+        mlflow_connect(my_xgboost)
+        save_mlflow(my_xgboost)
 
         return None
-
-dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
-my_xgboost = MyXGBoost(target = 'Compras')
-my_xgboost.run()
+    
 
 
-
+if __name__ == '__main__':
+    run('Ventas')
 
 
 

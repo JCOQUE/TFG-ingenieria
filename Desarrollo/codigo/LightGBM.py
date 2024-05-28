@@ -130,7 +130,7 @@ class MyLightGBM:
         return predictions
 
     
-    def save_prediction_to_csv(self, predictions, metric):
+    def save_predictions_to_csv(self, predictions, metric):
         if metric == 'best_MAE':
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
@@ -195,9 +195,9 @@ def make_predictions(lgbm, model):
     return lgbm.make_predictions(model)
 
 @task(task_run_name = 'Save predictions {model}', log_prints = True)
-def save_prediction_to_csv(lgbm, predictions, model):
+def save_predictions_to_csv(lgbm, predictions, model):
     print(f'Saving {model} predictions...')
-    lgbm.save_prediction_to_csv(predictions, model)
+    lgbm.save_predictions_to_csv(predictions, model)
 
 @task(task_run_name = 'Init mlflow repository', log_prints = True)
 def init_mlflow_repository(lgbm):
@@ -223,10 +223,10 @@ def run(target):
         save_best_results(my_lgbm, results)
 
         predictions_mae = make_predictions(my_lgbm, 'best_MAE')
-        save_prediction_to_csv(my_lgbm, predictions_mae, 'best_MAE')
+        save_predictions_to_csv(my_lgbm, predictions_mae, 'best_MAE')
         
         predictions_rmse = make_predictions(my_lgbm, 'best_RMSE')
-        save_prediction_to_csv(my_lgbm, predictions_rmse, 'best_RMSE')
+        save_predictions_to_csv(my_lgbm, predictions_rmse, 'best_RMSE')
 
         init_mlflow_repository(my_lgbm)
         mlflow_connect(my_lgbm)
