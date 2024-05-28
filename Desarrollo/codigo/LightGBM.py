@@ -23,7 +23,8 @@ warnings.filterwarnings("ignore", category=UserWarning, module='mlflow.types.uti
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-
+ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/csv_predictions'
+ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/pred_plots'
 class MyLightGBM:
 
     def __init__(self, target):
@@ -128,15 +129,11 @@ class MyLightGBM:
 
     
     def save_prediction_to_csv(self, predictions, metric):
-        absolute_path = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/csv_predictions'
-        files = os.listdir(absolute_path)
-        for item in files:
-            print(item)
         print(f'Current working directory: {os.getcwd()}')
         if metric == 'best_MAE':
-            predictions.to_csv(f'{absolute_path}/{self.model_name}_{self.target}_best_mae.csv')
+            predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
-            predictions.to_csv(f'csv_predictions/{self.model_name}_{self.target}_best_rmse.csv')
+            predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
         mf.save_pred_plot(self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
                                                    
 
@@ -168,9 +165,9 @@ class MyLightGBM:
                 mlflow.log_params(self.best_results.loc['parameters', metric])
                 mlflow.log_metric('MAE', self.best_results.loc['mae', metric])
                 mlflow.log_metric('RMSE', self.best_results.loc['rmse', metric])
-                mlflow.log_artifact(f'csv_predictions/{self.model_name}_{self.target}_{metric.lower()}.csv',
+                mlflow.log_artifact(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_{metric.lower()}.csv',
                                     artifact_path = 'predictions')
-                mlflow.log_artifact(f'pred_plots/{self.model_name} {self.target} Prediction {metric.upper()}.png',
+                mlflow.log_artifact(f'{ABS_PATH_PLOTS}/{self.model_name} {self.target} Prediction {metric.upper()}.png',
                     artifact_path="plots")
                 
 
