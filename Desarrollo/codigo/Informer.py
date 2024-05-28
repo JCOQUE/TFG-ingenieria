@@ -134,7 +134,7 @@ class MyInformer:
         param_grid = {
             'n_heads': [8],
             'dropout': [0.2],
-            'learning_rate': [0.1, 0.01, 0.001],
+            'learning_rate': [0.1],
             'num_epochs': [3]
         }
 
