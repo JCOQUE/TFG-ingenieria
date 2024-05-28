@@ -5,7 +5,7 @@ from datetime import datetime
 import mlflow
 from mlflow.data.pandas_dataset import PandasDataset
 from mlflow.models.signature import infer_signature
-from prefect import flow
+from prefect import flow, task
 import dagshub
 import sys
 import io
@@ -36,6 +36,7 @@ class MyLightGBM:
                                 'neg_root_mean_squared_error':'neg_mean_absolute_error'}
         self.best_results = None
 
+    @task()
     def setting_attributes(self):
         print('Setting attributes...')
         self.ts = mgts.get_ts(self.target)
@@ -79,6 +80,7 @@ class MyLightGBM:
         
         return best_model
     
+    @task
     def train(self):
         print('Training...')
         model = self.create_model()
@@ -95,6 +97,7 @@ class MyLightGBM:
     def get_results(self, model):
         return model.cv_results_
     
+    @task
     def save_best_results(self, results):
         print('Saving results...')
         best_results = {}
@@ -118,12 +121,14 @@ class MyLightGBM:
                                 inplace = True) 
         self.best_results.index = ['model', 'parameters', 'mae', 'rmse']   
 
+    @task
     def make_predictions(self, metric):
         print(f'Making {metric} predictions...')
         best_metric_model = self.best_results.loc['model', metric]
         predictions = mf.get_pred_df(self.ts, best_metric_model)
         return predictions
 
+    @task
     def save_prediction_to_csv(self, predictions, metric):
         print(f'Saving {metric} predictions...')
         if metric == 'best_MAE':
@@ -136,14 +141,17 @@ class MyLightGBM:
     def get_current_time(self):
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
     
+    @task
     def ini_mlflow_reporitory(self):
         dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True) 
-    
+
+    @task
     def mlflow_connect(self):
         print('Connecting to mlflow...')
         mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
         mlflow.set_experiment(f'{self.target} LightGBM')
 
+    @task
     def save_mlflow(self):
         print('Saving to mlflow...')
         current_time = self.get_current_time()
@@ -165,7 +173,7 @@ class MyLightGBM:
                 mlflow.log_artifact(f'pred_plots/{self.model_name} {self.target} Prediction {metric.upper()}.png',
                     artifact_path="plots")
                 
-                
+    @flow          
     def run(self):
         self.setting_attributes()
         best_model_lgbm = self.train()
@@ -183,16 +191,12 @@ class MyLightGBM:
         self.save_mlflow()
 
         return None
-        
-@flow
-def hello_world():
-    return print('hello worldd')
+    
 
 if __name__ == '__main__':
-    # my_lgbm = MyLightGBM(target = 'Ventas')
-    # my_lgbm.run() 
-    print('hello')
-    hello_world()
+    my_lgbm = MyLightGBM(target = 'Compras')
+    my_lgbm.run() 
+
 
         
 
