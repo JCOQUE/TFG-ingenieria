@@ -127,8 +127,9 @@ class MyLightGBM:
 
     
     def save_prediction_to_csv(self, predictions, metric):
+        absolute_path = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo'
         if metric == 'best_MAE':
-            predictions.to_csv(f'csv_predictions/{self.model_name}_{self.target}_best_mae.csv')
+            predictions.to_csv(f'{absolute_path}/csv_predictions/{self.model_name}_{self.target}_best_mae.csv')
         else:
             predictions.to_csv(f'csv_predictions/{self.model_name}_{self.target}_best_rmse.csv')
         mf.save_pred_plot(self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
