@@ -1,8 +1,7 @@
 import sys
-import os
-# Needed to import my modules located in the parent folder
-current_directory = os.getcwd().replace('\\', '/')
-sys.path.append(f'{current_directory}/Informer2020')
+
+# Needed to use the Informer2020 modules
+sys.path.append('C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/Informer2020')
 
 import numpy as np
 import pandas as pd
@@ -11,11 +10,13 @@ from sklearn.base import BaseEstimator, RegressorMixin
 from sklearn.model_selection import GridSearchCV
 from torch.utils.data import DataLoader, TensorDataset
 import mlflow
+from prefect import flow, task
 import dagshub
 import pickle
 import sys
 import io
-from datetime import datetime, timedelta
+from datetime import datetime
+
 
 from Informer2020.models.model import Informer
 
@@ -27,6 +28,10 @@ from tfg_module import my_future as mf
 #UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
+
+ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/csv_predictions'
+ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/pred_plots'
+ABS_PATH_PICKLE_MODELS = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/pickle_models'
 
 
 class InformerWrapper(BaseEstimator, RegressorMixin):
@@ -116,7 +121,6 @@ class MyInformer:
 
     
     def setting_attributes(self):
-        print('Setting attributes...')
         self.ts = mgts.get_ts(self.target)
         self.X, self.y = mpd.create_features(self.ts.copy(), target=self.target, informer=True)
         self.seq_len = 12  # since it is montly data, use the past 12 values for prediction
@@ -150,7 +154,6 @@ class MyInformer:
         return model
 
     def train(self):
-        print('Training...')
         param_grid = self.get_param_grid()
         self.set_metrics()
         best_model_informer = self.define_model(param_grid)
@@ -163,7 +166,6 @@ class MyInformer:
         return model.cv_results_
 
     def save_best_results(self, results):
-        print('Saving best results...')
         best_results = {}
         for metric in self.metrics:
             best_index = results[f'rank_test_{metric}'].argmin()
@@ -188,70 +190,117 @@ class MyInformer:
         self.best_results.index = ['model', 'parameters', 'mae', 'rmse']
 
     def make_predictions(self, metric):
-        print(f'Making {metric} predictions...')
         best_metric_model = self.best_results.loc['model', metric]
         predictions = mf.get_pred_df(self.ts, best_metric_model, informer=True)
         return predictions
 
     def save_prediction_to_csv(self, predictions, metric):
-        print(f'Saving {metric} predictions...')
         if metric == 'best_MAE':
-            predictions.to_csv(f'csv_predictions/{self.model_name}_{self.target}_best_mae.csv')
+            predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
-            predictions.to_csv(f'csv_predictions/{self.model_name}_{self.target}_best_rmse.csv')
+            predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
         mf.save_pred_plot(self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
 
     def get_current_time(self):
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
     
+    def init_mlflow_repository(self):
+        dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
+    
     def mlflow_connect(self):
-        print('Connecting to mlflow...')
         mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
-        mlflow.set_experiment(f'{self.target} Informer')
+        mlflow.set_experiment(f'{self.target} Informer v1')
 
     def save_mlflow(self):
-        print('Saving to mlflow...')
         current_time = self.get_current_time()
         for metric in self.best_results.columns:
             with mlflow.start_run(run_name =f'{metric}'):
                 mlflow.set_tag('model_name', f'{self.model_name}_{metric}')
                 mlflow.set_tag('Time', f'{current_time}')
                 self.save_model_to_pickle(metric)
-                mlflow.log_artifact(f"pickle_models/{self.model_name}_{self.target}_{metric}.pkl",
+                mlflow.log_artifact(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl",
                                     artifact_path="model")
                 mlflow.log_params(self.best_results.loc['parameters', metric])
                 mlflow.log_metric('MAE', self.best_results.loc['mae', metric])
                 mlflow.log_metric('RMSE', self.best_results.loc['rmse', metric])
-                mlflow.log_artifact(f'csv_predictions/{self.model_name}_{self.target}_{metric.lower()}.csv', artifact_path = 'predictions')
-                mlflow.log_artifact(f'pred_plots/{self.model_name} {self.target} Prediction {metric.upper()}.png',
+                mlflow.log_artifact(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_{metric.lower()}.csv', artifact_path = 'predictions')
+                mlflow.log_artifact(f'{ABS_PATH_PLOT}/{self.model_name} {self.target} Prediction {metric.upper()}.png',
                                     artifact_path="plots")
 
                 
     def save_model_to_pickle(self, metric):
-        with open(f"pickle_models/{self.model_name}_{self.target}_{metric}.pkl", "wb") as save_model:
+        with open(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl", "wb") as save_model:
             pickle.dump(self.best_results.loc['model', metric], save_model)
 
-    def run(self):
-        self.setting_attributes()
-        best_model_informer = self.train()
-        results = self.get_results(best_model_informer)
-        self.save_best_results(results)
 
-        predictions_mae = self.make_predictions('best_MAE')
-        self.save_prediction_to_csv(predictions_mae, 'best_MAE')
 
-        predictions_rmse = self.make_predictions('best_RMSE')
-        self.save_prediction_to_csv(predictions_rmse, 'best_RMSE')
+# Prefect, at the moment, does not allow to use tasks in a class method. 
+@task(task_run_name = 'Setting attributes', log_prints = True, retries = 2)
+def set_attributes(informer):
+    print('Setting attributes...')
+    informer.setting_attributes()
 
-        self.mlflow_connect()
-        self.save_mlflow()
+@task(task_run_name = 'Train', log_prints = True, retries = 2)
+def train(informer):
+    print('Training...')
+    return informer.train() 
+
+@task(task_run_name = 'Get results', log_prints = True)
+def get_results(informer, best_model_lgbm):
+    return informer.get_results(best_model_lgbm)  
+
+@task(task_run_name = 'Save best results', log_prints = True)
+def save_best_results(informer, results):
+    print('Saving best results...')
+    informer.save_best_results(results)
+
+@task(task_run_name = 'Make predictions {model}', log_prints = True)
+def make_predictions(informer, model):
+    print(f'Making {model} predictions...')
+    return informer.make_predictions(model)
+
+@task(task_run_name = 'Save predictions {model}', log_prints = True)
+def save_prediction_to_csv(informer, predictions, model):
+    print(f'Saving {model} predictions...')
+    informer.save_prediction_to_csv(predictions, model)
+
+@task(task_run_name = 'Init mlflow repository', log_prints = True)
+def init_mlflow_repository(informer):
+    informer.init_mlflow_repository()
+
+@task(task_run_name = 'Connect to mlflow', log_prints = True)
+def mlflow_connect(informer):
+    print('Connecting to mlflow...')
+    informer.mlflow_connect()
+
+@task(task_run_name = 'Save results to mlflow', log_prints = True)
+def save_mlflow(informer):
+    print('Saving to mlflow...')
+    informer.save_mlflow()
+ 
+@flow(flow_run_name='Informer {target}')
+def run(target):
+        my_informer = MyInformer(target=target)
+        set_attributes(my_informer)
+
+        best_model_infomer = train(my_informer)
+        results = get_results(my_informer, best_model_infomer)
+        save_best_results(my_informer, results)
+
+        predictions_mae = make_predictions(my_informer, 'best_MAE')
+        save_prediction_to_csv(my_informer, predictions_mae, 'best_MAE')
+        
+        predictions_rmse = make_predictions(my_informer, 'best_RMSE')
+        save_prediction_to_csv(my_informer, predictions_rmse, 'best_RMSE')
+
+        init_mlflow_repository(my_informer)
+        mlflow_connect(my_informer)
+        save_mlflow(my_informer)
 
         return None
 
-
-dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
-my_informer = MyInformer(target='Compras')
-my_informer.run()  
+if __name__ == '__main__':
+    run('Compras')
 
 
     

@@ -15,5 +15,4 @@ pip install prefect
 pip install darts
 pip install azure-storage-blob
 pip install dagshub
-pip install apache-airflow
 #pip install chardet

@@ -23,3 +23,6 @@ Se han descartado las metricas rmse y mape por ser redundantes en la comparativa
 Mencionar que se estuvo mirando la herramienta de airflow como otro posible task orquestrations
 
 El tfg esta lleno de plus: transformers, codigo limpio, dagshub, etc
+
+
+El repositorio de github es publico pero el de dagshub no

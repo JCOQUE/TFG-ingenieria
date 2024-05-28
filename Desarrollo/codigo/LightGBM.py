@@ -25,6 +25,8 @@ sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
 ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/csv_predictions'
 ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/pred_plots'
+
+
 class MyLightGBM:
 
     def __init__(self, target):
@@ -129,7 +131,6 @@ class MyLightGBM:
 
     
     def save_prediction_to_csv(self, predictions, metric):
-        print(f'Current working directory: {os.getcwd()}')
         if metric == 'best_MAE':
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
@@ -139,17 +140,14 @@ class MyLightGBM:
 
     def get_current_time(self):
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
-    
    
     def init_mlflow_repository(self):
         dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True) 
 
-    
     def mlflow_connect(self):
         mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
-        mlflow.set_experiment(f'{self.target} LightGBM prueba')
+        mlflow.set_experiment(f'{self.target} LightGBM p1')
 
-    
     def save_mlflow(self):
         current_time = self.get_current_time()
         for metric in self.best_results.columns:
@@ -215,8 +213,8 @@ def save_mlflow(lgbm):
     print('Saving to mlflow...')
     lgbm.save_mlflow()
  
-@flow(flow_run_name='LightGBM {target}')
-def run(target = 'Compras'):
+@flow(flow_run_name='LightGBM {target} p1')
+def run(target):
         my_lgbm = MyLightGBM(target = target)
         set_attributes(my_lgbm)
 
@@ -239,7 +237,7 @@ def run(target = 'Compras'):
 
 
 if __name__ == '__main__':
-    run()
+    run('Ventas')
      
 
 
