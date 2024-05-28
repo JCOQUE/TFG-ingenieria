@@ -193,7 +193,7 @@ class MyInformer:
         predictions = mf.get_pred_df(self.ts, best_metric_model, informer=True)
         return predictions
 
-    def save_prediction_to_csv(self, predictions, metric):
+    def save_predictions_to_csv(self, predictions, metric):
         if metric == 'best_MAE':
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
@@ -231,7 +231,9 @@ class MyInformer:
                 
     def save_model_to_pickle(self, metric):
         print('Hen entrado en pickle')
+        print('adios')
         print(type(self.best_results.loc['model', metric]))
+        print('hola')
         with open(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl", "wb") as save_model:
             pickle.dump(self.best_results.loc['model', metric], save_model)
 
@@ -263,9 +265,9 @@ def make_predictions(informer, model):
     return informer.make_predictions(model)
 
 @task(task_run_name = 'Save predictions {model}', log_prints = True)
-def save_prediction_to_csv(informer, predictions, model):
+def save_predictions_to_csv(informer, predictions, model):
     print(f'Saving {model} predictions...')
-    informer.save_prediction_to_csv(predictions, model)
+    informer.save_predictions_to_csv(predictions, model)
 
 @task(task_run_name = 'Init mlflow repository', log_prints = True)
 def init_mlflow_repository(informer):
@@ -291,10 +293,10 @@ def run(target):
         save_best_results(my_informer, results)
 
         predictions_mae = make_predictions(my_informer, 'best_MAE')
-        save_prediction_to_csv(my_informer, predictions_mae, 'best_MAE')
+        save_predictions_to_csv(my_informer, predictions_mae, 'best_MAE')
         
         predictions_rmse = make_predictions(my_informer, 'best_RMSE')
-        save_prediction_to_csv(my_informer, predictions_rmse, 'best_RMSE')
+        save_predictions_to_csv(my_informer, predictions_rmse, 'best_RMSE')
 
         init_mlflow_repository(my_informer)
         mlflow_connect(my_informer)
