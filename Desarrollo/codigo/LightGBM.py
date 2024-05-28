@@ -167,7 +167,7 @@ class MyLightGBM:
                 mlflow.log_metric('RMSE', self.best_results.loc['rmse', metric])
                 mlflow.log_artifact(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_{metric.lower()}.csv',
                                     artifact_path = 'predictions')
-                mlflow.log_artifact(f'{ABS_PATH_PLOTS}/{self.model_name} {self.target} Prediction {metric.upper()}.png',
+                mlflow.log_artifact(f'{ABS_PATH_PLOT}/{self.model_name} {self.target} Prediction {metric.upper()}.png',
                     artifact_path="plots")
                 
 

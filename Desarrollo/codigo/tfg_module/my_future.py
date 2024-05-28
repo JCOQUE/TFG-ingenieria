@@ -34,7 +34,7 @@ def concatante_past_future_values(ts, df):
     return df
 
 def save_pred_plot(model_name, ts, df_pred, metric):
-    absolute_path = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/pred_plots'
+    ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/pred_plots'
     try:
         plt.plot(ts['date'], ts[ts.columns[1]], label = 'Actual', color = 'blue')
         plt.plot(df_pred['date'], df_pred['pred'], label = 'Predicted', color = 'orange')
@@ -44,7 +44,7 @@ def save_pred_plot(model_name, ts, df_pred, metric):
         plt.box(False)
         plt.grid(False)
         plt.legend()
-        plt.savefig(f'{absolute_path}/{model_name} {ts.columns[1]} Prediction {metric.upper()}.png')
+        plt.savefig(f'{ABS_PATH_PLOT}/{model_name} {ts.columns[1]} Prediction {metric.upper()}.png')
         plt.close()
         #plt.show()
     except Exception as e:
