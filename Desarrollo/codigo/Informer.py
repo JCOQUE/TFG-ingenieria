@@ -2,7 +2,6 @@ import sys
 
 # Needed to use the Informer2020 modules
 sys.path.append('C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/Informer2020')
-sys.path.append('C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/Informer2020/models')
 
 import numpy as np
 import pandas as pd
@@ -17,7 +16,6 @@ import pickle
 import sys
 import io
 from datetime import datetime
-
 
 from Informer2020.models.model import Informer
 
