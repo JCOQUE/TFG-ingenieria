@@ -1,7 +1,13 @@
 import pandas as pd
 import numpy as np
+import matplotlib
 import matplotlib.pyplot as plt
 import tfg_module.my_process_data as mpd
+
+# This line solves the following warning:
+# UserWarning: Starting a Matplotlib GUI outside of the main thread will likely fail.
+# https://stackoverflow.com/questions/69924881/userwarning-starting-a-matplotlib-gui-outside-of-the-main-thread-will-likely-fa
+matplotlib.use('Agg')
 
 
 def get_future_features(dataset, informer = False):

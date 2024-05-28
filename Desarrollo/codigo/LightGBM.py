@@ -36,9 +36,8 @@ class MyLightGBM:
                                 'neg_root_mean_squared_error':'neg_mean_absolute_error'}
         self.best_results = None
 
-    @task()
+    
     def setting_attributes(self):
-        print('Setting attributes...')
         self.ts = mgts.get_ts(self.target)
         self.X, self.y = mpd.create_features(self.ts.copy(), target = self.target, informer = False)
     
@@ -80,9 +79,8 @@ class MyLightGBM:
         
         return best_model
     
-    @task
+    
     def train(self):
-        print('Training...')
         model = self.create_model()
         param_grid = self.get_param_grid()
         cross_val_split = self.get_cross_validation()
@@ -97,7 +95,7 @@ class MyLightGBM:
     def get_results(self, model):
         return model.cv_results_
     
-    @task
+    
     def save_best_results(self, results):
         print('Saving results...')
         best_results = {}
@@ -121,16 +119,14 @@ class MyLightGBM:
                                 inplace = True) 
         self.best_results.index = ['model', 'parameters', 'mae', 'rmse']   
 
-    @task
+    
     def make_predictions(self, metric):
-        print(f'Making {metric} predictions...')
         best_metric_model = self.best_results.loc['model', metric]
         predictions = mf.get_pred_df(self.ts, best_metric_model)
         return predictions
 
-    @task
+    
     def save_prediction_to_csv(self, predictions, metric):
-        print(f'Saving {metric} predictions...')
         if metric == 'best_MAE':
             predictions.to_csv(f'csv_predictions/{self.model_name}_{self.target}_best_mae.csv')
         else:
@@ -141,19 +137,17 @@ class MyLightGBM:
     def get_current_time(self):
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
     
-    @task
-    def ini_mlflow_reporitory(self):
+   
+    def init_mlflow_repository(self):
         dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True) 
 
-    @task
+    
     def mlflow_connect(self):
-        print('Connecting to mlflow...')
         mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
-        mlflow.set_experiment(f'{self.target} LightGBM')
+        mlflow.set_experiment(f'{self.target} LightGBM prueba')
 
-    @task
+    
     def save_mlflow(self):
-        print('Saving to mlflow...')
         current_time = self.get_current_time()
         for metric in self.best_results.columns:
             with mlflow.start_run(run_name =f'{metric}'):
@@ -173,29 +167,77 @@ class MyLightGBM:
                 mlflow.log_artifact(f'pred_plots/{self.model_name} {self.target} Prediction {metric.upper()}.png',
                     artifact_path="plots")
                 
-    @flow          
-    def run(self):
-        self.setting_attributes()
-        best_model_lgbm = self.train()
-        results = self.get_results(best_model_lgbm)
-        self.save_best_results(results)
 
-        predictions_mae = self.make_predictions('best_MAE')
-        self.save_prediction_to_csv(predictions_mae, 'best_MAE')
+# Prefect, at the moment, does not allow to use tasks in a class method. 
+@task(task_run_name = 'Setting attributes', log_prints = True, retries = 2)
+def set_attributes(lgbm):
+    print('Setting attributes...')
+    lgbm.setting_attributes()
+
+@task(task_run_name = 'Train', log_prints = True, retries = 2)
+def train(lgbm):
+    print('Training...')
+    return lgbm.train() 
+
+@task(task_run_name = 'Get results', log_prints = True, retries = 2)
+def get_results(lgbm, best_model_lgbm):
+    return lgbm.get_results(best_model_lgbm)  
+
+@task(task_run_name = 'Save best results', log_prints = True, retries = 2)
+def save_best_results(lgbm, results):
+    print('Saving best results...')
+    lgbm.save_best_results(results)
+
+@task(task_run_name = 'Make predictions {model}', log_prints = True, retries = 2)
+def make_predictions(lgbm, model):
+    print(f'Making {model} predictions...')
+    return lgbm.make_predictions(model)
+
+@task(task_run_name = 'Save predictions {model}', log_prints = True, retries = 2)
+def save_prediction_to_csv(lgbm, predictions, model):
+    print(f'Saving {model} predictions...')
+    lgbm.save_prediction_to_csv(predictions, model)
+
+@task(task_run_name = 'Init mlflow repository', log_prints = True, retries = 2)
+def init_mlflow_repository(lgbm):
+    lgbm.init_mlflow_repository()
+
+@task(task_run_name = 'Connect to mlflow', log_prints = True, retries = 2)
+def mlflow_connect(lgbm):
+    print('Connecting to mlflow...')
+    lgbm.mlflow_connect()
+
+@task(task_run_name = 'Save results to mlflow', log_prints = True, retries = 2)
+def save_mlflow(lgbm):
+    print('Saving to mlflow...')
+    lgbm.save_mlflow()
+ 
+@flow(flow_run_name='LightGBM {target}', retries = 2, timeout_seconds = 3600)
+def run(target = 'Compras'):
+        my_lgbm = MyLightGBM(target = target)
+        set_attributes(my_lgbm)
+
+        best_model_lgbm = train(my_lgbm)
+        results = get_results(my_lgbm, best_model_lgbm)
+        save_best_results(my_lgbm, results)
+
+        predictions_mae = make_predictions(my_lgbm, 'best_MAE')
+        save_prediction_to_csv(my_lgbm, predictions_mae, 'best_MAE')
         
-        predictions_rmse = self.make_predictions('best_RMSE')
-        self.save_prediction_to_csv(predictions_rmse, 'best_RMSE')
+        predictions_rmse = make_predictions(my_lgbm, 'best_RMSE')
+        save_prediction_to_csv(my_lgbm, predictions_rmse, 'best_RMSE')
 
-        self.init_mlflow_reporitory()
-        self.mlflow_connect()
-        self.save_mlflow()
+        init_mlflow_repository(my_lgbm)
+        mlflow_connect(my_lgbm)
+        save_mlflow(my_lgbm)
 
         return None
     
 
+
 if __name__ == '__main__':
-    my_lgbm = MyLightGBM(target = 'Compras')
-    my_lgbm.run() 
+    run()
+     
 
 
         
