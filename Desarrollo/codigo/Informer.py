@@ -216,11 +216,9 @@ class MyInformer:
             with mlflow.start_run(run_name =f'{metric}'):
                 mlflow.set_tag('model_name', f'{self.model_name}_{metric}')
                 mlflow.set_tag('Time', f'{current_time}')
-                print('Voy a salvar a pickle')
-                self.save_model_to_pickle(metric)
-                print('model salvado')
-                mlflow.log_artifact(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl",
-                                    artifact_path="model")
+                #self.save_model_to_pickle(metric)
+                #mlflow.log_artifact(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl",
+                                    #artifact_path="model")
                 mlflow.log_params(self.best_results.loc['parameters', metric])
                 mlflow.log_metric('MAE', self.best_results.loc['mae', metric])
                 mlflow.log_metric('RMSE', self.best_results.loc['rmse', metric])
