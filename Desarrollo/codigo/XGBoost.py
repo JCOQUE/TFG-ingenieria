@@ -21,8 +21,8 @@ warnings.filterwarnings("ignore", category=UserWarning, module='mlflow.types.uti
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/csv_predictions'
-ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFGinso/Desarrollo/codigo/pred_plots'
+ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/csv_predictions'
+ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pred_plots'
 
 
 class MyXGBoost:
@@ -242,7 +242,7 @@ def run(target):
     
 
 if __name__ == '__main__':
-    run('Ventas')
+    run('Compras')
 
 
 
