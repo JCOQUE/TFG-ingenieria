@@ -146,7 +146,7 @@ class MyLightGBM:
 
     def mlflow_connect(self):
         mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
-        mlflow.set_experiment(f'{self.target} LightGBM p1')
+        mlflow.set_experiment(f'{self.target} LightGBM v1')
 
     def save_mlflow(self):
         current_time = self.get_current_time()
@@ -213,7 +213,7 @@ def save_mlflow(lgbm):
     print('Saving to mlflow...')
     lgbm.save_mlflow()
  
-@flow(flow_run_name='LightGBM {target} p1')
+@flow(flow_run_name='LightGBM {target}')
 def run(target):
         my_lgbm = MyLightGBM(target = target)
         set_attributes(my_lgbm)

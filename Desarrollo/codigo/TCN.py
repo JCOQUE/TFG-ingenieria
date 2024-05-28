@@ -176,32 +176,6 @@ class MyTCN:
         with open(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl", "wb") as save_model:
             pickle.dump(self.best_results.loc['model', metric], save_model)
 
-
-#     def run(self):
-#         self.setting_attributes()
-#         train, test = self.get_train_test()
-#         mae_model, rmse_model = self.train(train, test)
-#         self.save_best_results(train, test, mae_model, rmse_model)
-
-#         mae_predictions = self.make_predictions('best_MAE')
-#         predictions_df = self.predictions_to_df(mae_predictions)
-#         self.save_predictions_to_csv(predictions_df, 'best_MAE')
-
-#         rmse_predictions = self.make_predictions('best_RMSE')
-#         predictions_df = self.predictions_to_df(rmse_predictions)
-#         self.save_predictions_to_csv(predictions_df, 'best_RMSE')
-
-#         self.mlflow_connect()
-#         self.save_mlflow(self.ts_df, predictions_df)
-
-#         return None
-
-# dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)
-# my_tcn = MyTCN(target='Compras')
-# my_tcn.run()
-
-
-
 # Prefect, at the moment, does not allow to use tasks in a class method. 
 @task(task_run_name = 'Setting attributes', log_prints = True, retries = 2)
 def set_attributes(tcn):
@@ -249,7 +223,7 @@ def save_mlflow(tcn):
     print('Saving to mlflow...')
     tcn.save_mlflow()
  
-@flow(flow_run_name='TCN {target} p1')
+@flow(flow_run_name='TCN {target}')
 def run(target):
         my_tcn = MyTCN(target=target) 
         set_attributes(my_tcn)
@@ -271,22 +245,6 @@ def run(target):
         save_mlflow(my_tcn)
 
         return None
-    
-        # self.setting_attributes()
-        # train, test = self.get_train_test()
-        # mae_model, rmse_model = self.train(train, test)
-        # self.save_best_results(train, test, mae_model, rmse_model)
-
-        # mae_predictions = self.make_predictions('best_MAE')
-        # predictions_df = self.predictions_to_df(mae_predictions)
-        # self.save_predictions_to_csv(predictions_df, 'best_MAE')
-
-        # rmse_predictions = self.make_predictions('best_RMSE')
-        # predictions_df = self.predictions_to_df(rmse_predictions)
-        # self.save_predictions_to_csv(predictions_df, 'best_RMSE')
-
-        # self.mlflow_connect()
-        # self.save_mlflow(self.ts_df, predictions_df)
 
 
 if __name__ == '__main__':

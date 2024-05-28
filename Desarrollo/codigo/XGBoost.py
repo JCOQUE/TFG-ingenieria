@@ -219,7 +219,7 @@ def save_mlflow(xgboost):
     print('Saving to mlflow...')
     xgboost.save_mlflow()
  
-@flow(flow_run_name='XGBoost {target} p1')
+@flow(flow_run_name='XGBoost {target}')
 def run(target):
         my_xgboost = MyXGBoost(target = target)
         set_attributes(my_xgboost)
