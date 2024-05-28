@@ -136,6 +136,9 @@ class MyLightGBM:
     def get_current_time(self):
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
     
+    def ini_mlflow_reporitory(self):
+        dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True) 
+    
     def mlflow_connect(self):
         print('Connecting to mlflow...')
         mlflow.set_tracking_uri(uri='https://dagshub.com/JCOQUE/TFG-ingenieria.mlflow')
@@ -175,20 +178,19 @@ class MyLightGBM:
         predictions_rmse = self.make_predictions('best_RMSE')
         self.save_prediction_to_csv(predictions_rmse, 'best_RMSE')
 
-        # self.mlflow_connect()
-        # self.save_mlflow()
+        self.init_mlflow_reporitory()
+        self.mlflow_connect()
+        self.save_mlflow()
 
         return None
-        
-# dagshub.init(repo_owner='JCOQUE', repo_name='TFG-ingenieria', mlflow=True)        
-# my_lgbm = MyLightGBM(target = 'Ventas')
-# my_lgbm.run()
-
         
 @flow
 def hello_world():
     return print('hello world')
+
 if __name__ == '__main__':
+    # my_lgbm = MyLightGBM(target = 'Ventas')
+    # my_lgbm.run() 
     print('hello')
     hello_world()
 
