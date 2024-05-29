@@ -72,6 +72,9 @@ The Azure SQL Database is the source from which PowerBI retrieves data. The main
 - Video 3: https://www.youtube.com/watch?v=07A3LPfiu18
    - Aleksi Partanen Tech: How to Copy a CSV File From Blob Storage To Azure SQL DB
 
+- Video 4: https://www.youtube.com/watch?v=p78BJ3A-EvQ&t=1313s&pp=ygUPYWxla3NpIHRyaWdnZXJz
+   - Aleksi Partanen Tech: How To Use Data Factory Triggers - Easy To Understand!
+
 **Additionally**:
 - How to perform UPSERT (i.e. Update + Insert) with Copy Data activity: https://www.youtube.com/watch?v=fegEN1Z1viM
    - TechBrothersIT: How to Perform UPSERT Insert/Update with Copy Activity in Azure Data Factory | ADF Tutorial 2022
