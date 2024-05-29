@@ -1,6 +1,6 @@
 # Intro
 
-In this README file, important information about the project will be described such as: links where the core information has been found, important aspect to keep in mind when modifying the code and other things. All this will be organized by tool used in the project such as PowerBI, Azure, etc.
+In this README file, important information about the project will be described such as: links where the core information has been found, important aspects to keep in mind when modifying the code and other things. All this will be organized by tool used in the project such as PowerBI, Azure, etc.
 
 ## Tools
 In this section, the software tools, along with some information source will be discussed.
@@ -12,6 +12,7 @@ In a nutshell, Dagshub is a github for ML and data engineers. The main reason to
 ###### Related info sources for this project:
 - Good Dagshub intro (no needed to know for this project): https://www.youtube.com/watch?v=SpBzOY-TIvg&t=306s&pp=ygUcZGFnc2h1YiBpbnRybyBkYXRhIHByb2Zlc3Nvcg%3D%3D
    - Data Professor: Introduction to DagsHub for Data Science
+     
 - Non-local mlflow repository w/ Dagshub: https://www.youtube.com/watch?v=K9se7KQON5k&t=695s&pp=ygUTbWxmbG93IHdpdGggZGFnc2h1Yg%3D%3D
    - DSwithBappy: 02. Setting Up MLflow Experiments To a Remote Server | DagsHub | MLOps
 
@@ -20,7 +21,7 @@ For training automation, Prefect was used. Even though python files can be execu
 ###### Related info sources for this project:
 - Good Prefect intro:  https://www.youtube.com/watch?v=D5DhwVNHWeU&t=1126s&pp=ygUHcHJlZmVjdA%3D%3D
    - Kahan Data Solutions: Getting Started with Prefect | Task Orchestration & Data Workflows
-   - 
+  
 > Note: Airflow was also considered. You can use that software tool instead if prefered.
 
 ### Azure
@@ -62,5 +63,5 @@ PowerBI is a data visualization tool. There is no specific reason to have chosen
 These popular version control systems (vcs) have been used throughout all this project
 
 
-
+## Commands and other important info to keep in mind
 
