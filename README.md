@@ -7,6 +7,10 @@ Mlflow is an MLOPS tool that allows you to save a model, its parameters, metrics
 - No specific source info was searched for this tool. Anything on internes is helpful.
 ## Dagshub
 In a nutshell, Dagshub is a github for ML and data engineers. The main reason to use Dagshub in this project, is to be able to deploy Mlflow in a non-local environment so that it simulates in a better way a real case scenario. 
-- https://www.youtube.com/watch?v=K9se7KQON5k&t=695s&pp=ygUTbWxmbG93IHdpdGggZGFnc2h1Yg%3D%3D
+- Related info source for this project: https://www.youtube.com/watch?v=K9se7KQON5k&t=695s&pp=ygUTbWxmbG93IHdpdGggZGFnc2h1Yg%3D%3D
+
+## Prefect
+For training automation, Prefect was used. Even though python files can be executed automatically with cron jobs that every OS has, there is now way to track the execution. Prefect allows you to automate file execution, setting input parameters to this file, set some execution policies such as: retries, maximum amount of time to execute a file to save computer resources and much more. It also provides a web where you can track the executions of you files, if it failed, why it failed. Additionally it integrates with other software tools in case you are using them in you code. This way, you can save in prefect api keys, access tokens, and other security stuff that you use in you code.
+- Good Prefect intro:  https://www.youtube.com/watch?v=D5DhwVNHWeU&t=1126s&pp=ygUHcHJlZmVjdA%3D%3D
 
 
