@@ -122,5 +122,6 @@ You can create a deployment in prefect with a `.yaml`, with a `.py` with the com
 - do you want to set a schedule for this deployment.
 - Is the function you provided to execute stored in Github (or other storage placed)
 - etc.
-![Prefect deloyment](Desarrollo/imgs/prefect_deployment.png)
+- 
+![Prefect deloyment](Desarrollo/img/prefect_deployment.png)
 
