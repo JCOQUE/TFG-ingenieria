@@ -17,12 +17,12 @@ In this repository you will find:
   - **requirements.txt**: library requirements in this project.
   - 
 - **dashboard**: This is where the dashboard, Zebra BI and PureViz (see PowerBI section below) figures and more is allocated.
-- 
+  
 - **Memoria**: This folder contains the documentation for this project.
   - **Latex**: Contains .tex for the documentation.
    - **imgs**: Contains mages used in the documentations.
    - **documento.pdf**: Documentation of this project.
-   - 
+     
 - **Teoria**: This folder contains most of the theory applied in this project.
   - **papers**: Most relevant papers separated by algorithms.
    - **Contabilidad**: Accounting info is saved in here.
