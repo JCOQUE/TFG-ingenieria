@@ -60,15 +60,16 @@ class MyXGBoost:
         Returns all possible parameters values that the GridSearchCV method. 
         It will try all possible combinations.
         '''
-        param_grid = {  'n_estimators': [50, 100, 300, 500, 1000],
+        param_grid = {
+                        'n_estimators': [50, 100, 300, 500, 1000],
                         'max_leaves': [2, 4, 6, 8, 10],
                         'max_depth': [2, 5, 7, 10],
-                        'grow_policy':[0,1],
+                        'grow_policy': ['depthwise', 'lossguide'],
                         'learning_rate': [0.001, 0.01, 0.05, 0.1],
-                        'booster': ['gbtree', 'gblinear', 'dart'],
-                        'tree_method':['exact', 'approx'],
-                        'colsample_bytree': [0.3,  0.7],
-                        'random_state':[None]
+                        'booster': ['gbtree', 'dart'],  
+                        'tree_method': ['exact', 'approx'],
+                        'colsample_bytree': [0.3, 0.7],
+                        'random_state': [None]
                     }
                             
         return param_grid
