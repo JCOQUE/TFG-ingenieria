@@ -37,7 +37,6 @@ def transform_data_to_ts(dataset, target):
     This function transforms the dataset into a time series grouped by year and
     then month.
     '''
-    target = target_cleaned(target)
     dataset['Fecha'] = pd.to_datetime(dataset['Fecha'], format='%d/%m/%Y')
     month_prct_estimation = month_prct_target_estimation(dataset.copy(), target)
     dataset['Year'] = dataset['Fecha'].dt.year

@@ -47,6 +47,7 @@ class MyXGBoost:
         the time series to work with, as well as setting the features as 
         the training input and the target as the training output.
         '''
+        self.target = mgts.target_cleaned(self.target)
         self.ts = mgts.get_ts(self.target)
         self.X, self.y = mpd.create_features(self.ts.copy(), target = self.target, informer = False)
     
