@@ -7,5 +7,6 @@ Mlflow is an MLOPS tool that allows you to save a model, its parameters, metrics
 - No specific source info was searched for this tool. Anything on internes is helpful.
 ## Dagshub
 In a nutshell, Dagshub is a github for ML and data engineers. The main reason to use Dagshub in this project, is to be able to deploy Mlflow in a non-local environment so that it simulates in a better way a real case scenario. 
+- (https://www.youtube.com/watch?v=K9se7KQON5k&t=695s&pp=ygUTbWxmbG93IHdpdGggZGFnc2h1Yg%3D%3D)
 
 
