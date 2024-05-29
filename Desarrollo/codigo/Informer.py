@@ -140,6 +140,7 @@ class MyInformer:
         Initializes the correct attributes for the model. These are parameters
         that should not be changed.
         '''
+        self.target = mgts.target_cleaned(self.target)
         self.ts = mgts.get_ts(self.target)
         self.X, self.y = mpd.create_features(self.ts.copy(), target=self.target, informer=True)
         self.seq_len = 12  # since it is montly data, use the past 12 values for prediction

@@ -54,6 +54,7 @@ class MyTCN:
         Gets the time series to work with and passes it to a 
         TimeSeries object to work with the TCN Darts library.
         '''
+        self.target = mgts.target_cleaned(self.target)
         self.ts_df = mgts.get_ts(self.target)
         self.ts = TimeSeries.from_dataframe(self.ts_df.copy(), time_col='date', value_cols=[self.target])
     
