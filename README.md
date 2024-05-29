@@ -15,10 +15,28 @@ For training automation, Prefect was used. Even though python files can be execu
 
 ## Azure
 Azure is a cloud computing platform and service created by Microsoft. 
-#### Azure Blob Storge
+#### Azure Blob Storage
 In this project, Azure Blob Storage is a datalake used for two things: raw .csv used in this project is saved here. And the transformed (added columns, predictions and more) .csv is also saved here as a .parquet. This .parquet is the one used in PowerBI for data visualization.
 #### Data Factory
 Data Factory (a.k.a ADF (Azure Data Factory) is another resource provided by Azure that allows you to create pipelines to move, transform and process data between different sources. For this project, it was used to copy data from the .parquet to an SQL Database.
-### Azure SQL Database
+#### Azure SQL Database
 The Azure SQL Database is the source from which PowerBI is going to retrieve data from. The main reason to use SQL Database as the PowerBI source is because it is a source that allows query folding for incremental refreshing in PowerBI (see PowerBI section).
-> Note: arsten
+> Note: The reason to have used Azure Blob Storage and Azure SQL Database is because it simulates a real case scenario much better where the .csv and the SQL Database are decoupled.
+###### Azure helpful info sources
+- Video 1: https://www.youtube.com/watch?v=xBJbvTAi5lY&
+
+- Video 2: https://www.youtube.com/watch?v=gc5mWkRPfWM&
+
+- Video3: https://www.youtube.com/watch?v=07A3LPfiu18
+
+**Additionally to that**:
+- How to perform UPSERT with Copy Data activity: https://www.youtube.com/watch?v=fegEN1Z1viM&
+- Datatype convertion: https://www.youtube.com/watch?v=vB446EB_-aU
+
+
+
+
+
+
+
+
