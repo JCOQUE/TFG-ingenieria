@@ -110,8 +110,17 @@ These popular version control systems (VCS) have been used throughout this proje
    - After executing this command, you'll two options:  log in using web browser or using API key. For the first time use your web browser. Once you've done this, I encourage you to create an API key (Profile -> API keys) and log in with  this API key the next time. It will ask you to give a life time to this API key. Choose the time you want.
    - Once you execute this command, you can start interacting with Prefect.
 - Create a Work-pool: `prefect work-pool  --type <type_of_work_pool> <work_pool_name>`
-- Create a deployment (be careful with this one. Read *Things to keep in mind* section below): `prefect deploy route/to/your/file/file.py:<function_name_with_flow_decorator> -n <deployment_name>  -p <your_work_pool_name>`
+- Create a deployment (be careful with this one. Read *Things to keep in mind* section below): `prefect deploy route/to/your/file/file.py:<function_name_with_flow_decorator> -n <deployment_name> -p <your_work_pool_name>`
 - Finally, to execute the code you need a worker activated: `prefect worker start --pool <your_work_pool_name>` 
 
+> Note: In the first command, the type of work pool used was `process`.
+> Note: These commands are appropiate for a type `process` Work-pool. There are other types of Work-pools, and some of these commands might not be  correct.
 
+#### Things to keep in mind
+##### Creating a deploymen in Prefect
+You can create a deployment in prefect with a `.yaml`, with a `.py` with the command `.deploy` or via CLI like I explained in the previous section. Keep in mind that doing it via CLI, you'll be asked some question like: 
+- do you want to set a schedule for this deployment.
+- Is the function you provided to execute stored in Github (or other storage placed)
+- etc.
+![Prefect deloyment](Desarrollo/imgs/prefect_deployment.png)
 
