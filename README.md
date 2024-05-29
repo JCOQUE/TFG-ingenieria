@@ -2,6 +2,10 @@
 
 In this README file, important information about the project will be described such as: links where the core information has been found, important aspects to keep in mind when modifying the code and other things. All this will be organized by tool used in the project such as PowerBI, Azure, etc.
 
+## Repository info
+In this repository...
+
+
 ## Tools
 In this section, the software tools, along with some information source will be discussed.
 ### Mlflow
