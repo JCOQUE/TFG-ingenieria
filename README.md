@@ -101,12 +101,15 @@ These popular version control systems (VCS) have been used throughout this proje
 - `git remote set-url origin <you_github_repository_url>`
 - `git status`
 - `git add .`
-- `git commit -m '<commit_message>`
+- `git commit -m '<commit_message>'`
 - `git pull origin main`
 - `git push origin main`
 
 ##### Prefect
-- 
+- `prefect init cloud`  (you should've created a Prefect account previously)
+   - After executing this command, you'll two options:  log in using web browser or using API key. For the first time use your web browser. Once you've done this, I encourage you to create an API key (Profile -> API keys) and log in with  this API key the next time. It will ask you to give a life time to this API key. Choose the time you want.
+   - Once you execute this command, you can start interacting with Prefect.
+- Create a Work-pool: `prefect work-pool  --type <ul>process</ul>
 
 
 
