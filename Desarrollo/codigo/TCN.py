@@ -17,6 +17,7 @@ import warnings
 
 from tfg_module import my_get_time_series as mgts
 from tfg_module import my_future as mf
+from tfg_module import my_get_directories as mgd
 
 
 logging.getLogger('pytorch_lightning').setLevel(logging.CRITICAL)
@@ -31,9 +32,9 @@ prog_bar = TFMProgressBar(enable_train_bar = False,
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/csv_predictions'
-ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pred_plots'
-ABS_PATH_PICKLE_MODELS = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pickle_models'
+ABS_PATH_CSV = mgd.get_csv_directory()
+ABS_PATH_PLOT = mgd.get_pred_plots_directory()
+ABS_PATH_PICKLE_MODELS = mgd.get_pickle_models_directory()
 
 '''
 NOTE: In this same folder you have a .ipynb notebook where you can follow in an easier way the core of this code.
@@ -95,20 +96,25 @@ class MyTCN:
         Returns all possible parameters values that the GridSearchCV method. 
         It will try all possible combinations.
         '''
+        # param_grid = dict(input_chunk_length = [4,8,12], 
+        #                    output_chunk_length = [1, 2, 3],
+        #                     n_epochs = [50, 100, 300],
+        #                     dropout = [0.05, 0.1, 0.2, 0.3],
+        #                     dilation_base = [2],
+        #                     weight_norm = [True],
+        #                     kernel_size = [3],
+        #                     num_filters = [6],
+        #                     batch_size = [16 , 32], 
+        #                     loss_fn = [torch.nn.MSELoss()],
+        #                     optimizer_cls = [torch.optim.Adam],
+        #                     optimizer_kwargs = [{'lr': 0.001}, {'lr': 0.01}, {'lr': 0.05}, {'lr': 0.1}],
+        #                     random_state = [None],
+        #                     pl_trainer_kwargs=[{"callbacks": [prog_bar]}])
+
         param_grid = dict(input_chunk_length = [4,8,12], 
                            output_chunk_length = [1, 2, 3],
-                            n_epochs = [10],
-                            dropout = [0.2],
-                            dilation_base = [2],
-                            weight_norm = [True],
-                            kernel_size = [3],
-                            num_filters = [6],
-                            batch_size = [32], 
-                            loss_fn = [torch.nn.MSELoss()],
-                            optimizer_cls = [torch.optim.Adam],
-                            optimizer_kwargs = [{'lr': 0.1}, {'lr': 0.01}],
-                            random_state = [None],
-                            pl_trainer_kwargs=[{"callbacks": [prog_bar]}])
+        
+       pl_trainer_kwargs=[{"callbacks": [prog_bar]}])
         
         return param_grid
     
@@ -201,7 +207,7 @@ class MyTCN:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
-        mf.save_pred_plot(self.model_name, self.ts_df, predictions, metric) # it does not show the pred because plt.show() is commented.
+        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.ts_df, predictions, metric) # it does not show the pred because plt.show() is commented.
 
     def get_current_time(self):
         '''
@@ -307,7 +313,7 @@ def save_mlflow(tcn):
     print('Saving to mlflow...')
     tcn.save_mlflow()
  
-@flow(flow_run_name='TCN {target}')
+@flow(flow_run_name='TCN {target}', retries = 2)
 def run(target):
         my_tcn = MyTCN(target=target) 
         set_attributes(my_tcn)

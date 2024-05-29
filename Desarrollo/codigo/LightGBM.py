@@ -9,12 +9,12 @@ from prefect import flow, task
 import dagshub
 import sys
 import io
-import os
 import warnings
 
 from tfg_module import my_get_time_series as mgts
 from tfg_module import my_process_data as mpd
 from tfg_module import my_future as mf
+from tfg_module import my_get_directories as mgd
 
 warnings.filterwarnings("ignore", category=UserWarning, module='mlflow.types.utils')
 
@@ -23,8 +23,8 @@ warnings.filterwarnings("ignore", category=UserWarning, module='mlflow.types.uti
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/csv_predictions'
-ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pred_plots'
+ABS_PATH_CSV = mgd.get_csv_directory()
+ABS_PATH_PLOT = mgd.get_pred_plots_directory()
 
 '''
 NOTE: In this same folder you have a .ipynb notebook where you can follow in an easier way the core of this code.
@@ -62,23 +62,14 @@ class MyLightGBM:
         Returns all possible parameters values that the GridSearchCV method. 
         It will try all possible combinations.
         '''
-        param_grid = {
-            'max_depth': [3,5,10],
-            'num_leaves': [10, 20, 30]#,
-            # 'learning_rate': [0.1, 0.01],
-            # 'n_estimators': [50, 500, 1000],
-            # 'colsample_bytree': [0.3,  0.7],
-            # 'objective': ['binary'],
-            # 'boosting_type': ['rf'],
-            # 'num_leaves': [5],
-            # 'force_row_wise': [True],
-            # 'learning_rate': [0.5],
-            # 'metric': ['binary_logloss'],
-            # 'bagging_fraction': [0.8],
-            # 'feature_fraction': [0.8],
-            # 'num_round' = [500],
-            # 'random_state' = [None]
-        }
+        param_grid = {  'n_estimators': [50, 100, 300, 500, 1000],
+                        'max_leaves': [2, 4, 6, 8, 10],
+                        'max_depth': [2, 5, 7, 10],
+                        'learning_rate': [0.001, 0.01, 0.05, 0.1],
+                        'boosting_type': ['gbdt', 'dart', 'rf'],
+                        'colsample_bytree': [0.3,  0.7],
+                        'random_state': [None]
+                    }
         
         return param_grid
     
@@ -189,7 +180,7 @@ class MyLightGBM:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
-        mf.save_pred_plot(self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
+        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
                                                    
 
     def get_current_time(self):
@@ -286,7 +277,7 @@ def save_mlflow(lgbm):
     print('Saving to mlflow...')
     lgbm.save_mlflow()
  
-@flow(flow_run_name='LightGBM {target}')
+@flow(flow_run_name='LightGBM {target}', retries = 2)
 def run(target):
         my_lgbm = MyLightGBM(target = target)
         set_attributes(my_lgbm)

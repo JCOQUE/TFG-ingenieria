@@ -48,13 +48,12 @@ def concatante_past_future_values(ts, df):
     df.loc[df.index[0], 'pred'] = ts[ts.columns[1]].iloc[-1]
     return df
 
-def save_pred_plot(model_name, ts, df_pred, metric):
+def save_pred_plot(path, model_name, ts, df_pred, metric):
     '''
     Plots the prediction results along with the time series (ts)
     itself using the matplotlib library for visual results. The absolute path 
     is needed if using Prefect.
     '''
-    ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pred_plots'
     try:
         plt.plot(ts['date'], ts[ts.columns[1]], label = 'Actual', color = 'blue')
         plt.plot(df_pred['date'], df_pred['pred'], label = 'Predicted', color = 'orange')
@@ -64,7 +63,7 @@ def save_pred_plot(model_name, ts, df_pred, metric):
         plt.box(False)
         plt.grid(False)
         plt.legend()
-        plt.savefig(f'{ABS_PATH_PLOT}/{model_name} {ts.columns[1]} Prediction {metric.upper()}.png')
+        plt.savefig(f'{path}/{model_name} {ts.columns[1]} Prediction {metric.upper()}.png')
         plt.close()
         #plt.show()
     except Exception as e:

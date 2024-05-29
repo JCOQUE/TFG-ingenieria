@@ -22,15 +22,16 @@ from Informer2020.model import Informer
 from tfg_module import my_get_time_series as mgts
 from tfg_module import my_process_data as mpd
 from tfg_module import my_future as mf
+from tfg_module import my_get_directories as mgd
 
 # IMPORTANT!! These lines are needed for the following error when connecting to dagshub:
 #UnicodeEncodeError: 'charmap' codec can't encode characters in position 0-2: character maps to <undefined>
 sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf-8')
 sys.stderr = io.TextIOWrapper(sys.stderr.buffer, encoding='utf-8')
 
-ABS_PATH_CSV = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/csv_predictions'
-ABS_PATH_PLOT = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pred_plots'
-ABS_PATH_PICKLE_MODELS = 'C:/Users/jcoqu/OneDrive/Documents/U-tad/Curso5/TFG/TFG_ingenieria/Desarrollo/codigo/pickle_models'
+ABS_PATH_CSV = mgd.get_csv_directory()
+ABS_PATH_PLOT = mgd.get_pred_plots_directory()
+ABS_PATH_PICKLE_MODELS = mgd.get_pickle_models_directory()
 
 '''
 NOTE: In this same folder you have a .ipynb notebook where you can follow in an easier way the core of this code.
@@ -157,10 +158,10 @@ class MyInformer:
         It will try all possible combinations.
         '''
         param_grid = {
-            'n_heads': [8],
-            'dropout': [0.2],
-            'learning_rate': [0.1],
-            'num_epochs': [3]
+            'n_heads': [2, 4, 6, 8],
+            'dropout': [0.05, 0.1, 0.2, 0.3],
+            'learning_rate': [0.001, 0.01, 0.05, 0.1],
+            'num_epochs': [50, 100, 300, 500]
         }
 
         return param_grid
@@ -262,7 +263,7 @@ class MyInformer:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
-        mf.save_pred_plot(self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
+        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
 
     def get_current_time(self):
         '''
@@ -363,7 +364,7 @@ def save_mlflow(informer):
     print('Saving to mlflow...')
     informer.save_mlflow()
  
-@flow(flow_run_name='Informer {target}')
+@flow(flow_run_name='Informer {target}', retries = 2)
 def run(target):
         my_informer = MyInformer(target=target)
         set_attributes(my_informer)
