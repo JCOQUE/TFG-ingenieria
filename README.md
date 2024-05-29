@@ -128,15 +128,25 @@ You can create a deployment in prefect with a `.yaml`, with a `.py` with the com
 
 <br>
 This is important to keep in mind because I did not expect any interaction when executing this the `prefect deploy` command, and I did not know at first that you could set a .py in Github to execute via CLI.
+
 ---
+
 When using the prefect deploy command, it's crucial to understand how Prefect fetches and uses your code from a GitHub repository.
 The prefect deploy command must be executed from the root directory of your GitHub repository on your local machine. This is necessary because Prefect will use this root path to correctly locate and fetch your code from the repository. 
 In other words, before executing the `prefect deploy` command, navigate first to the root directory of the repository on your local machine with `cd /path/to/local/your_project_folder` 
+
 --- 
+
 Another thing to keep in mind is that at the moment, Prefect does not allow you -or at least not in a trivial way- to use ther decorators @task and @flow in class methods. They should be used in functions. That's why you'll find some *redundant* code in the .py.
+
 --- 
+
 Last but not least, are the paths where you store data. If your code, saves or retrieves data from a path on your local machine, use **absolute paths** always. That's why I created, inside `Desarrollo/codigo/tfg_module` a `.py` called `my_get_directories.py`. 
 > Note: As I said before, this in case you set the work pool the way I did.
+
+
+<br>
+<br>
 
 That's pretty much everything. Hopefully things were explain decently ;).
 
