@@ -11,18 +11,21 @@ In this repository you will find:
         - **pickle_models**: Folder where Informer and TCN models are temporary saved to save them later to Mlflow. This is needed since they are not standard frameworks supported by mlflow.
         - **pred_plots**: Folder where predictions of each model (Informer, LightGBM, TCN and XGBoost) for each target (Ventas and Compras) and for each tracked metric (MAE and RMSE) are saved as a png (with the command plt.savefig()). These plots will be used to save them as artifacts in Mlflow along with their respective model.
         - **csv_predictions**: Folder where predictions of each model (Informer, LightGBM, TCN and XGBoost) for each target (Ventas and Compras) and for each tracked metric (MAE and RMSE) are saved as a .csv (with the command plt.to_csv()). These .csv will be used to save them as artifacts in Mlflow along with their respective model.
-     - **datasets**: This folder contains the datasets used in this project. diario.csv is the one used in this project and it is allocated in Azure Blob Storage (see the section below: Azure). Calendario and PGC are used in PowerBI.
-     - **img**: Images used in this projects documentation in section 4. Desarrollo.
-     - **SQL scripts**: (very basic) Commands used in SQL Sever Management Studio.
-     - **requirements.txt**: library requirements in this project.
-  - **dashboard**: This is where the dashboard, Zebra BI and PureViz (see PowerBI section below) figures and more is allocated.
-  - **Memoria**: This folder contains the documentation for this project.
-       - **Latex**: Contains .tex for the documentation.
-       - **imgs**: Contains mages used in the documentations.
-       - **documento.pdf**: Documentation of this project.
-   - **Teoria**: This folder contains most of the theory applied in this project.
-      - **papers**: Most relevant papers separated by algorithms.
-      - **Contabilidad**: Accounting info is saved in here.
+  - **datasets**: This folder contains the datasets used in this project. diario.csv is the one used in this project and it is allocated in Azure Blob Storage (see the section below: Azure). Calendario and PGC are used in PowerBI.
+  - **img**: Images used in this projects documentation in section 4. Desarrollo.
+  - **SQL scripts**: (very basic) Commands used in SQL Sever Management Studio.
+  - **requirements.txt**: library requirements in this project.
+  - 
+- **dashboard**: This is where the dashboard, Zebra BI and PureViz (see PowerBI section below) figures and more is allocated.
+- 
+- **Memoria**: This folder contains the documentation for this project.
+  - **Latex**: Contains .tex for the documentation.
+   - **imgs**: Contains mages used in the documentations.
+   - **documento.pdf**: Documentation of this project.
+   - 
+- **Teoria**: This folder contains most of the theory applied in this project.
+  - **papers**: Most relevant papers separated by algorithms.
+   - **Contabilidad**: Accounting info is saved in here.
 ## Tools
 In this section, the software tools along with some information sources will be discussed.
 
