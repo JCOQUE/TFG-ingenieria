@@ -98,7 +98,7 @@ These popular version control systems (VCS) have been used throughout this proje
 ##### Git
 - `git init`
 - `git branch -M main`
-- `git remote set-url origin <you_github_repository_url>`
+- `git remote set-url origin <your_github_repository_url>`
 - `git status`
 - `git add .`
 - `git commit -m '<commit_message>'`
@@ -106,8 +106,8 @@ These popular version control systems (VCS) have been used throughout this proje
 - `git push origin main`
 
 ##### Prefect
-- `prefect init cloud`  (you should've created a Prefect account previously)
-   - After executing this command, you'll two options:  log in using web browser or using API key. For the first time use your web browser. Once you've done this, I encourage you to create an API key (Profile -> API keys) and log in with  this API key the next time. It will ask you to give a life time to this API key. Choose the time you want.
+- `prefect init cloud`  (you should have created a Prefect account previously)
+   - After executing this command, you'll have two options:  log in using web browser or using API key. For the first time, use your web browser. Once you've done this, I encourage you to create an API key (Profile -> API keys) and log in with  this API key the next time. It will ask you to give a Time to live (TTL) to this API key. Choose the time you want.
    - Once you execute this command, you can start interacting with Prefect.
 - Create a Work-pool: `prefect work-pool  --type <type_of_work_pool> <work_pool_name>`
 - Create a deployment (be careful with this one. Read *Things to keep in mind* section below): `prefect deploy path/to/your/file/file.py:<function_name_with_flow_decorator> -n <deployment_name> -p <your_work_pool_name>`
@@ -118,20 +118,20 @@ These popular version control systems (VCS) have been used throughout this proje
 
 #### Things to keep in mind
 ##### Creating a deploymen in Prefect
-You can create a deployment in prefect with a `.yaml`, with a `.py` with the command `.deploy` or via CLI like I explained in the previous section. Keep in mind that doing it via CLI, you'll be asked some question like: 
-- do you want to set a schedule for this deployment.
-- Is the function you provided to execute stored in Github (or other storage placed)
+You can create a deployment in Prefect with a `.yaml`, with a `.py` with the command `.deploy` or via CLI like I explained in the previous section. Keep in mind that doing it via CLI, you'll be asked some question like: 
+- do you want to set a schedule for this deployment?
+- Is the function you provided to execute stored in Github (or other storage place).
 - etc.
 <br>
 
 ![Prefect deloyment](Desarrollo/img/prefect_deployment.png)
 
 <br>
-This is important to keep in mind because I did not expect any interaction when executing this the `prefect deploy` command, and I did not know at first that you could set a .py in Github to execute via CLI.
+This is important to keep in mind because I did not expect any interaction when executing the `prefect deploy` command, and I did not know at first that you could set a `py` in Github to execute via CLI.
 
 ---
 
-When using the prefect deploy command, it's crucial to understand how Prefect fetches and uses your code from a GitHub repository.
+When using the `prefect deploy` command, it's crucial to understand how Prefect fetches and uses your code from a GitHub repository.
 The prefect deploy command must be executed from the root directory of your GitHub repository on your local machine. This is necessary because Prefect will use this root path to correctly locate and fetch your code from the repository. 
 In other words, before executing the `prefect deploy` command, navigate first to the root directory of the repository on your local machine with `cd /path/to/local/your_project_folder` 
 
@@ -142,11 +142,11 @@ Another thing to keep in mind is that at the moment, Prefect does not allow you 
 --- 
 
 Last but not least, are the paths where you store data. If your code, saves or retrieves data from a path on your local machine, use **absolute paths** always. That's why I created, inside `Desarrollo/codigo/tfg_module` a `.py` called `my_get_directories.py`. 
-> Note: As I said before, this in case you set the work pool the way I did.
+> Note: As I said before, this is in case you set the work pool the way I did.
 
 
 <br>
 <br>
 
-That's pretty much everything. Hopefully things were explain decently ;).
+That's pretty much everything. Hopefully things were explained decently ;).
 
