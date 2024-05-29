@@ -43,7 +43,7 @@ In a nutshell, Dagshub is a GitHub for ML and data engineers. The main reason to
    - DSwithBappy: 02. Setting Up MLflow Experiments To a Remote Server | DagsHub | MLOps
 
 ### Prefect
-For training automation, Prefect was used. Even though Python files can be executed automatically with cron jobs that every OS has, there is no way to track the execution. Prefect allows you to automate file execution, set input parameters for this file, and set some execution policies such as retries, maximum execution time to save computer resources, and much more. It also provides a web interface where you can track the executions of your files, see if they failed, and understand why they failed. Additionally, it integrates with other software tools in case you are using them in your code. This way, you can save API keys, access tokens, and other security information in Prefect.
+For training automation, Prefect was used. Even though Python files can be executed automatically with cron jobs that every OS has, there is no way to track the execution. Prefect allows you to automate file execution, set input parameters for this file, and set some execution policies such as retries, maximum execution time to save computer resources, and much more. Additionally, unlike basic cron jobs you can decide where is the code you want to execute (for example, the code that I execute is on Github) and you can decide where that code get executed. This is perfect in case you have a laptot with GPU. It also provides a web interface where you can track the executions of your files, see if they failed, and understand why they failed. Additionally, it integrates with other software tools in case you are using them in your code. This way, you can save API keys, access tokens, and other security information in Prefect.
 ###### Related info sources for this project:
 - Good Prefect intro: https://www.youtube.com/watch?v=D5DhwVNHWeU&t=1126s&pp=ygUHcHJlZmVjdA%3D%3D
    - Kahan Data Solutions: Getting Started with Prefect | Task Orchestration & Data Workflows
@@ -93,3 +93,25 @@ PowerBI is a data visualization tool. There is no specific reason to have chosen
 These popular version control systems (VCS) have been used throughout this project.
 
 ## Commands and other important info to keep in mind
+
+#### Commnads
+##### Git
+- `git init`
+- `git branch -M main`
+- `git remote set-url origin <you_github_repository_url>`
+- `git status`
+- `git add .`
+- `git commit -m '<commit_message>'`
+- `git pull origin main`
+- `git push origin main`
+
+##### Prefect
+- `prefect init cloud`  (you should've created a Prefect account previously)
+   - After executing this command, you'll two options:  log in using web browser or using API key. For the first time use your web browser. Once you've done this, I encourage you to create an API key (Profile -> API keys) and log in with  this API key the next time. It will ask you to give a life time to this API key. Choose the time you want.
+   - Once you execute this command, you can start interacting with Prefect.
+- Create a Work-pool: `prefect work-pool  --type <type_of_work_pool> <work_pool_name>`
+- Create a deployment (be careful with this one. Read *Things to keep in mind* section below): `prefect deploy route/to/your/file/file.py:<function_name_with_flow_decorator> -n <deployment_name>  -p <your_work_pool_name>`
+- Finally, to execute the code you need a worker activated: `prefect worker start --pool <your_work_pool_name>` 
+
+
+
