@@ -46,10 +46,9 @@ class MyLightGBM:
     
     def setting_attributes(self):
         '''
-        This function is in charge of initializing the correct attributes
-        for the model. These are getting the time series to work with, as well
-        as setting the features as the training input and the target as the 
-        training output.
+        Initializes the correct attributes for the model. These are getting 
+        the time series to work with, as well as setting the features as 
+        the training input and the target as the training output.
         '''
         self.ts = mgts.get_ts(self.target)
         self.X, self.y = mpd.create_features(self.ts.copy(), target = self.target, informer = False)
@@ -59,8 +58,8 @@ class MyLightGBM:
     
     def get_param_grid(self):
         '''
-        Return all possible parameters values that the GridSearchCV method 
-        must try with all possible combinations.
+        Returns all possible parameters values that the GridSearchCV method. 
+        It will try all possible combinations.
         '''
         param_grid = {
             'max_depth': [3,5,10],
@@ -76,7 +75,8 @@ class MyLightGBM:
             # 'metric': ['binary_logloss'],
             # 'bagging_fraction': [0.8],
             # 'feature_fraction': [0.8],
-            # 'num_round' = [500]  
+            # 'num_round' = [500],
+            # 'random_state' = [None]
         }
         
         return param_grid
@@ -84,7 +84,7 @@ class MyLightGBM:
     
     def get_cross_validation(self):
         '''
-        This function creates the necessary splits for the cross validation
+        Creates the necessary splits for the cross validation
         method applied in the GridSearchCV method from sklearn.
         '''
         return TimeSeriesSplit(n_splits=3, test_size=20)
@@ -99,7 +99,7 @@ class MyLightGBM:
 
     def define_model(self, model, param_grid, cv):
         '''
-        This functions creates the GridSearchCV object and the model, parameters and
+        Creates the GridSearchCV object and the model, parameters and
         metrics to track are passed. Also the number of cross validations (cv) that we 
         want to split our data into for training.
         '''
@@ -157,12 +157,13 @@ class MyLightGBM:
 
     def best_results_to_df(self, best_results):
         '''
-        This functions converts the results obtained in the function save_best_results
+        Converts the results obtained in the function save_best_results
         from a dictionary into a pandas DataFrame. Its columns are best_MAE and best RMSE.
         Its rows, their associated model, parameters, their score and the other metric score.
         '''
         self.best_results = pd.DataFrame(best_results)
-        self.best_results.rename(columns = {'neg_mean_absolute_error':'best_MAE', 'neg_root_mean_squared_error':'best_RMSE'}, 
+        self.best_results.rename(columns = {'neg_mean_absolute_error':'best_MAE',
+                                            'neg_root_mean_squared_error':'best_RMSE'}, 
                                 inplace = True) 
         self.best_results.index = ['model', 'parameters', 'mae', 'rmse']   
 
@@ -180,7 +181,7 @@ class MyLightGBM:
     
     def save_predictions_to_csv(self, predictions, metric):
         '''
-        This function saves the predictions into a .csv that will be useful in 
+        Saves the predictions into a .csv that will be useful in 
         the save_mlflow function to save them as an artifact in mflow.
         '''
         if metric == 'best_MAE':
@@ -192,7 +193,7 @@ class MyLightGBM:
 
     def get_current_time(self):
         '''
-        This functions returns the current time to save this information 
+        Returns the current time to save this information 
         along with the model in mlflow.
         '''
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
@@ -206,7 +207,7 @@ class MyLightGBM:
 
     def mlflow_connect(self):
         '''
-        This function sets where the experiments info (i.e. mlflow.<whatever> in the next function)
+        Sets where the experiments info (i.e. mlflow.<whatever> in the next function)
         should be saved (in the dagshub repository initialized in the previous function). 
         It also sets the experiment name.
         '''
@@ -215,7 +216,7 @@ class MyLightGBM:
 
     def save_mlflow(self):
         '''
-        This functions logs all the important information about the best models obtained
+        Logs all the important information about the best models obtained
         (for both MAE metric and RMSE metric) in mlflow.
         '''
         current_time = self.get_current_time()
@@ -251,35 +252,35 @@ def train(lgbm):
     print('Training...')
     return lgbm.train() 
 
-@task(task_run_name = 'Get results', log_prints = True)
+@task(task_run_name = 'Get results', log_prints = True, retries = 2)
 def get_results(lgbm, best_model_lgbm):
     return lgbm.get_results(best_model_lgbm)  
 
-@task(task_run_name = 'Save best results', log_prints = True)
+@task(task_run_name = 'Save best results', log_prints = True, retries = 2)
 def save_best_results(lgbm, results):
     print('Saving best results...')
     lgbm.save_best_results(results)
 
-@task(task_run_name = 'Make predictions {model}', log_prints = True)
+@task(task_run_name = 'Make predictions {model}', log_prints = True, retries = 2)
 def make_predictions(lgbm, model):
     print(f'Making {model} predictions...')
     return lgbm.make_predictions(model)
 
-@task(task_run_name = 'Save predictions {model}', log_prints = True)
+@task(task_run_name = 'Save predictions {model}', log_prints = True, retries = 2)
 def save_predictions_to_csv(lgbm, predictions, model):
     print(f'Saving {model} predictions...')
     lgbm.save_predictions_to_csv(predictions, model)
 
-@task(task_run_name = 'Init mlflow repository', log_prints = True)
+@task(task_run_name = 'Init mlflow repository', log_prints = True, retries = 2)
 def init_mlflow_repository(lgbm):
     lgbm.init_mlflow_repository()
 
-@task(task_run_name = 'Connect to mlflow', log_prints = True)
+@task(task_run_name = 'Connect to mlflow', log_prints = True, retries = 2)
 def mlflow_connect(lgbm):
     print('Connecting to mlflow...')
     lgbm.mlflow_connect()
 
-@task(task_run_name = 'Save results to mlflow', log_prints = True)
+@task(task_run_name = 'Save results to mlflow', log_prints = True, retries = 2)
 def save_mlflow(lgbm):
     print('Saving to mlflow...')
     lgbm.save_mlflow()

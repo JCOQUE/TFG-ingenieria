@@ -5,6 +5,10 @@ import tfg_module.my_dataset_transformations as mdf
 
 
 def get_ts(target):
+    '''
+    Returns the time series that the model needs to train
+    and predict.
+    '''
     dataset = get_dataset()
     dataset = mdf.transform_dataset(dataset)
     ts = transform_data_to_ts(dataset, target)
@@ -13,6 +17,9 @@ def get_ts(target):
     
 
 def get_dataset():
+    '''
+    Fetches via API the raw .csv from Azure Blob Store
+    '''
     account_name = "blobstoragetfginso"
     account_key = "gd5nuYRJgr/SLkHdH7PIhh72OLQX/kwKuDlF5yO3grgfrrfyFigneBBd5VJPEuYZC6qlgzTBlvBS+AStpXySag=="
     connection_string = f"DefaultEndpointsProtocol=https;AccountName={account_name};AccountKey={account_key};EndpointSuffix=core.windows.net"
@@ -26,6 +33,10 @@ def get_dataset():
 
    
 def transform_data_to_ts(dataset, target):
+    '''
+    This function transforms the dataset into a time series grouped by year and
+    then month.
+    '''
     target = target_cleaned(target)
     dataset['Fecha'] = pd.to_datetime(dataset['Fecha'], format='%d/%m/%Y')
     month_prct_estimation = month_prct_target_estimation(dataset.copy(), target)
@@ -47,25 +58,64 @@ def transform_data_to_ts(dataset, target):
     return ts 
 
 def month_prct_target_estimation(dataset, target):
+    '''
+    The logic behind this and the related functions is as follows:
+    Since I am grouping by Year and Month, if the most recent day that 
+    the dataset has record of is very recent, e.g. 5th, when the grouping
+    is done, it will set a very low and unrealistic target value 
+    for the most recent month. What I want to do is:
+        - If the day is lower that a limit day (see function get_target_prct_estimation())
+          then the most recent month will be predicted instead of grouped.
+        - If the day is above the limit, let's say 20th, if the group by is performed, the 
+          value is still unrealistic because the month hasn't ended yet. Therefore, I calculate,
+          based on the past years, the percentage of the target value in that month up until that 
+          that (20th in this case) compared to the total target value at the end of the month. This logic
+          assumes that if the past years, up until the day 20th of a month, it represented the 80% of the
+          sales value at the end of the month, then this year, the same pattern will occur for this month. 
+    This prct is what this function returns in case the day is above the limit. Otherwise it returns -1, 
+    and the most recent month will be considered too recent and will be predicted. See the function 
+    set_estimation_logic() where this logic is applied.
+    '''
     actual_day, actual_month, actual_year = get_actual_date_target(dataset, target)
     prct_estimation = get_target_prct_estimation(dataset, target, actual_day, actual_month, actual_year)
     return prct_estimation
 
 def get_filtered_target(target):
+    '''
+    Filters the target to only get the desired one.
+    '''
     filter_condition = {'Compras': '600',
                         'Ventas':'700'}
     return filter_condition[target]
 
 def get_actual_date_target(dataset, target):
+    '''
+    Note: read first explanation from the month_prct_target_estimation function above.
+
+    Returns the last day, its month and year for the last record of the target in the 
+    dataset.
+    '''
     actual_day = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]\
         .tail(1)['Fecha'].iloc[0].day
     actual_month = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]\
         .tail(1)['Fecha'].iloc[0].month
     actual_year = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]\
         .tail(1)['Fecha'].iloc[0].year
+    
     return actual_day, actual_month, actual_year
 
 def  get_target_prct_estimation(dataset, target, actual_day, actual_month, actual_year):
+    '''
+    Read first explanation from the month_prct_target_estimation function above.
+
+    This function sets a limit day to take into account in the time series the
+    most actual month that the dataset has. For example, this function can set that
+    if the most actual day in the most actual month that the dataset has is 4 or below, 
+    then this month will not be taken into account in the present data, and will be predicted
+    instead.
+    If the day exceeds the limit_day, it returns the corresponding prct. Otherwise -1 indicating
+    that this month will be predicted. This logic is done in the set_estimation_logic() below.
+    '''
     LIMIT_DAY = 10
     dataset = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]
     if actual_day < LIMIT_DAY:
@@ -77,13 +127,30 @@ def  get_target_prct_estimation(dataset, target, actual_day, actual_month, actua
         return prct_rounded
 
 def get_total_sum_month(dataset, target, actual_month, actual_year):
+    '''
+    Note: read first explanation from the month_prct_target_estimation function above.
+
+    It returns the total sum of the target (Compras or Ventas) for the most recent
+    month that the dataset has. It does not count the actual year.
+    '''
     return dataset[(dataset['Fecha'].dt.year < actual_year) & (dataset['Fecha'].dt.month == actual_month)][target].sum()
 
 def get_total_sum_day(dataset, target, actual_day, actual_month, actual_year):
+    '''
+    Note: read first explanation from the month_prct_target_estimation function above.
+
+    It returns the total sum of the target (Compras or Ventas) for the most actual month
+    that the dataset has, but only until the most actual day that the dataset has.
+    Example: If the last record of Ventas is May 7th, it returns the sum of Ventas for 
+    every May in every year (except the actual year) up until the day 7th.
+    '''
     return dataset[(dataset['Fecha'].dt.year < actual_year) & (dataset['Fecha'].dt.month == actual_month) & (dataset['Fecha']\
                     .dt.day <= actual_day)][target].sum()
     
 def target_cleaned(target):
+    '''
+    Making the input case-insensitive.
+    '''
     target = target.lower()
     if target == 'ventas':
         return 'Ventas'
@@ -93,6 +160,9 @@ def target_cleaned(target):
         raise ValueError('Incorrect target provided. Target can be either compras or ventas.')
     
 def get_dates(start_year, end_year, start_month, end_month):
+    '''
+    Since I am grouping by year and month, this function sets the day of the month to the end.
+    '''
     month_days = {1:'31',
         2:'28',
         3:'31', 
@@ -113,9 +183,16 @@ def get_dates(start_year, end_year, start_month, end_month):
                      end = end_date, freq = 'ME') #Warning: M is deprecated and will be removed in future versions. Use ME instead
 
 def change_order_columns(dataset):
+    '''
+    The dataset received has two columns: date and target (the latter can be either Ventas 
+    or Compras). It swaps the columns so the date is first (i.e. in the left side)
+    '''
     return dataset[[dataset.columns[1], dataset.columns[0]]]
 
 def set_estimation_logic(ts, target, prct_estimation):
+    '''
+    Note: read first explanation from the month_prct_target_estimation function above.
+    '''
     if prct_estimation == -1:
         ts = ts.iloc[:-1]
     else:

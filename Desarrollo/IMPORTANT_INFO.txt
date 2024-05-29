@@ -28,3 +28,5 @@ El tfg esta lleno de plus: transformers, codigo limpio, dagshub, etc
 
 
 El repositorio de github es publico pero el de dagshub no
+
+Todo herramientas que se utilizan en el ambito laboral y que no han sido explicadads en la universidad (prefect, mlflow, azure, powerBI)

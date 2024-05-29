@@ -58,7 +58,7 @@ class InformerWrapper(BaseEstimator, RegressorMixin):
 
     def create_model(self):
         '''
-        This functions initializes the Informer model with its respective parameters.
+        Initializes the Informer model with its respective parameters.
         '''
         self.model = Informer(
             enc_in=self.enc_in,
@@ -74,7 +74,7 @@ class InformerWrapper(BaseEstimator, RegressorMixin):
 
     def get_dataset(self, X, y):
         '''
-        This function get a Tensor dataset needed for the batch_x batch_y split
+        Returns a Tensor dataset needed for the batch_x batch_y split
         in the training.
         '''
         dataset = TensorDataset(X, y)
@@ -83,7 +83,7 @@ class InformerWrapper(BaseEstimator, RegressorMixin):
 
     def fit(self, X, y):
         '''
-        This function trains the Informer model.
+        Trains the Informer model.
         '''
         self.create_model()
         criterion = torch.nn.MSELoss()
@@ -103,7 +103,7 @@ class InformerWrapper(BaseEstimator, RegressorMixin):
   
     def predict(self, X):
         '''
-        This functions predicts values 12 months ahead.
+        Predicts values 12 months ahead.
         '''
         predictions = []
         with torch.no_grad():
@@ -137,8 +137,8 @@ class MyInformer:
     
     def setting_attributes(self):
         '''
-        This function is in charge of initializing the correct attributes
-        for the model. These are parameters that should not be changed.
+        Initializes the correct attributes for the model. These are parameters
+        that should not be changed.
         '''
         self.ts = mgts.get_ts(self.target)
         self.X, self.y = mpd.create_features(self.ts.copy(), target=self.target, informer=True)
@@ -152,8 +152,8 @@ class MyInformer:
     
     def get_param_grid(self):
         '''
-        Return all possible parameters values that the GridSearchCV method 
-        must try with all possible combinations.
+        Returns all possible parameters values that the GridSearchCV method. 
+        It will try all possible combinations.
         '''
         param_grid = {
             'n_heads': [8],
@@ -174,7 +174,7 @@ class MyInformer:
 
     def define_model(self, param_grid):
         '''
-        This functions creates the GridSearchCV object and the model, parameters and
+        Creates the GridSearchCV object and the model, parameters and
         metrics to track are passed. Also the number of cross validations (cv) that we 
         want to split our data into for training. If an error arises, try other number of
         cv.
@@ -232,7 +232,7 @@ class MyInformer:
 
     def best_results_to_df(self, best_results):
         '''
-        This functions converts the results obtained in the function save_best_results
+        Converts the results obtained in the function save_best_results
         from a dictionary into a pandas DataFrame. Its columns are best_MAE and best RMSE.
         Its rows, their associated model, parameters, their score and the other metric score.
         '''
@@ -254,7 +254,7 @@ class MyInformer:
 
     def save_predictions_to_csv(self, predictions, metric):
         '''
-        This function saves the predictions into a .csv that will be useful in 
+        Saves the predictions into a .csv that will be useful in 
         the save_mlflow function to save them as an artifact in mflow.
         '''
         if metric == 'best_MAE':
@@ -265,7 +265,7 @@ class MyInformer:
 
     def get_current_time(self):
         '''
-        This functions returns the current time to save this information 
+        Returns the current time to save this information 
         along with the model in mlflow.
         '''
         return datetime.now().strftime('%H:%M:%S %d/%m/%Y')
@@ -279,7 +279,7 @@ class MyInformer:
     
     def mlflow_connect(self):
         '''
-        This function sets where the experiments info (i.e. mlflow.<whatever> in the next function)
+        Sets where the experiments info (i.e. mlflow.<whatever> in the next function)
         should be saved (in the dagshub repository initialized in the previous function). 
         It also sets the experiment name.
         '''
@@ -288,7 +288,7 @@ class MyInformer:
 
     def save_mlflow(self):
         '''
-        This functions logs all the important information about the best models obtained
+        Logs all the important information about the best models obtained
         (for both MAE metric and RMSE metric) in mlflow.
         '''
         current_time = self.get_current_time()
@@ -329,35 +329,35 @@ def train(informer):
     print('Training...')
     return informer.train() 
 
-@task(task_run_name = 'Get results', log_prints = True)
+@task(task_run_name = 'Get results', log_prints = True, retries = 2)
 def get_results(informer, best_model_lgbm):
     return informer.get_results(best_model_lgbm)  
 
-@task(task_run_name = 'Save best results', log_prints = True)
+@task(task_run_name = 'Save best results', log_prints = True, retries = 2)
 def save_best_results(informer, results):
     print('Saving best results...')
     informer.save_best_results(results)
 
-@task(task_run_name = 'Make predictions {model}', log_prints = True)
+@task(task_run_name = 'Make predictions {model}', log_prints = True, retries = 2)
 def make_predictions(informer, model):
     print(f'Making {model} predictions...')
     return informer.make_predictions(model)
 
-@task(task_run_name = 'Save predictions {model}', log_prints = True)
+@task(task_run_name = 'Save predictions {model}', log_prints = True, retries = 2)
 def save_predictions_to_csv(informer, predictions, model):
     print(f'Saving {model} predictions...')
     informer.save_predictions_to_csv(predictions, model)
 
-@task(task_run_name = 'Init mlflow repository', log_prints = True)
+@task(task_run_name = 'Init mlflow repository', log_prints = True, retries = 2)
 def init_mlflow_repository(informer):
     informer.init_mlflow_repository()
 
-@task(task_run_name = 'Connect to mlflow', log_prints = True)
+@task(task_run_name = 'Connect to mlflow', log_prints = True, retries = 2)
 def mlflow_connect(informer):
     print('Connecting to mlflow...')
     informer.mlflow_connect()
 
-@task(task_run_name = 'Save results to mlflow', log_prints = True)
+@task(task_run_name = 'Save results to mlflow', log_prints = True, retries = 2)
 def save_mlflow(informer):
     print('Saving to mlflow...')
     informer.save_mlflow()

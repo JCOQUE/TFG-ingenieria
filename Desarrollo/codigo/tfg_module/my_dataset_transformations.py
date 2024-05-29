@@ -1,5 +1,14 @@
 import pandas as pd
 
+
+'''
+This .py converts the raw .csv file from Azure Blob Store into the 
+dataset used for prediction and in PowerBI. That means that applies
+the necessary transformations using pandas to obtain a Compras, Ventas,
+and NoGrupo columns. It also transforms some existing columns into 
+the desired type and format.
+'''
+
 def format_with_commas(x):
     return '{:,.0f}'.format(x)
 

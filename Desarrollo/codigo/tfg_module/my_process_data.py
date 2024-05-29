@@ -4,6 +4,15 @@ import torch
 
 
 def create_features(df, target = None, informer = False):
+    '''
+    This function is in charge of splitting the time series DataFrame
+    (which contains two columns: date and target) into input features 
+    for training (i.e. converting date, the input into hour, dayofweek,
+    etc.) and output values (the target itself). Since the Informer
+    model utilizes pytorch, and, therefore Tensors instead of pandas
+    DataFrame, an additional argument is needed to treat each model
+    in the proper way.
+    '''
     df['hour'] = df['date'].dt.hour
     df['dayofweek'] = df['date'].dt.dayofweek
     df['quarter'] = df['date'].dt.quarter
@@ -34,6 +43,13 @@ def create_features(df, target = None, informer = False):
 
 
 def get_train_test(ts, test_size = 0.2):
+    '''
+    this functions utilizes the train_test_split function provided
+    by sklearn to split the data into train and test. TCN is the only
+    model that makes use of this function since the rest of the models
+    use GridSearchCV from the sklearn library that uses Cross Validation
+    for training.
+    '''
     train, test = train_test_split(ts,  
                                     test_size = test_size,
                                     shuffle = False)
