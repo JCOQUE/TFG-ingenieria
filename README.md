@@ -13,11 +13,14 @@ In a nutshell, Dagshub is a github for ML and data engineers. The main reason to
 - Good Dagshub intro (no needed to know for this project): https://www.youtube.com/watch?v=SpBzOY-TIvg&t=306s&pp=ygUcZGFnc2h1YiBpbnRybyBkYXRhIHByb2Zlc3Nvcg%3D%3D
    - Data Professor: Introduction to DagsHub for Data Science
 - Non-local mlflow repository w/ Dagshub: https://www.youtube.com/watch?v=K9se7KQON5k&t=695s&pp=ygUTbWxmbG93IHdpdGggZGFnc2h1Yg%3D%3D
+   - DSwithBappy: 02. Setting Up MLflow Experiments To a Remote Server | DagsHub | MLOps
 
 ## Prefect
 For training automation, Prefect was used. Even though python files can be executed automatically with cron jobs that every OS has, there is now way to track the execution. Prefect allows you to automate file execution, setting input parameters to this file, set some execution policies such as: retries, maximum amount of time to execute a file to save computer resources and much more. It also provides a web where you can track the executions of you files, if it failed, why it failed. Additionally it integrates with other software tools in case you are using them in you code. This way, you can save in prefect api keys, access tokens, and other security stuff that you use in you code.
 ###### Related info sources for this project:
 - Good Prefect intro:  https://www.youtube.com/watch?v=D5DhwVNHWeU&t=1126s&pp=ygUHcHJlZmVjdA%3D%3D
+   - Kahan Data Solutions: Getting Started with Prefect | Task Orchestration & Data Workflows
+   - 
 > Note: Airflow was also considered. You can use that software tool instead if prefered.
 
 ### Azure
@@ -31,21 +34,28 @@ The Azure SQL Database is the source from which PowerBI is going to retrieve dat
 > Note: The reason to have used Azure Blob Storage and Azure SQL Database is because it simulates a real case scenario much better where the .csv and the SQL Database are decoupled.
 ###### Related info sources for this project:
 - Video 1: https://www.youtube.com/watch?v=xBJbvTAi5lY
+     - Aleksi Partanen Tech: Get started with Azure Data Factory in 2024
 
 - Video 2: https://www.youtube.com/watch?v=gc5mWkRPfWM
-
+   - Aleksi Partanen Tech: Linked Service to Azure SQL DB Using Managed Identity
+     
 - Video3: https://www.youtube.com/watch?v=07A3LPfiu18
+   - Aleksi Partanen Tech: How to Copy a CSV File From Blob Storage To Azure SQL DB
 
 **Additionally to that**:
-- How to perform UPSERT with Copy Data activity: https://www.youtube.com/watch?v=fegEN1Z1viM
+- How to perform UPSERT (i.e. Update + Insert) with Copy Data activity: https://www.youtube.com/watch?v=fegEN1Z1viM
+   - TechBrothersIT: How to Perform UPSERT Insert/Update with Copy Activity in Azure Data Factory | ADF Tutorial 2022
 - Datatype conversion: https://www.youtube.com/watch?v=vB446EB_-aU
+   - Cloud Knowledge: Data Type Conversion in Copy Data Activity | Convert Data Types from Json Code | CSV to Azure SQL DB
 
 
 ### PowerBI
 PowerBI is a data visualization tool. There is no specific reason to have chosen PowerBI over Tableau. [Zebra BI](https://zebrabi.com/pbi-pro-trial/?utm_term=zebra%20power%20bi&utm_campaign=Brand+campaign&utm_source=google&utm_medium=cpc&hsa_acc=5445927020&hsa_cam=10896260820&hsa_grp=108906923204&hsa_ad=634945809310&hsa_src=g&hsa_tgt=kwd-930008850410&hsa_kw=zebra%20power%20bi&hsa_mt=b&hsa_net=adwords&hsa_ver=3&gad_source=1&gclid=Cj0KCQjwpNuyBhCuARIsANJqL9ObqxkQ7e0maiaNObgA4knPiEXp2ruSty7l4JRZHvW-8eI3nH1wF6oaAignEALw_wcB), and [PureViz](https://pureviz.net/infographic) graphics were used.
 ###### Related info sources for this project:
 - Incremental Refreshing: https://www.youtube.com/watch?v=Kui_1G6kQIQ
+   - BI Gorilla: Configuring Incremental Refresh in Power BI
 - PowerBI AI features: https://www.youtube.com/watch?v=5URcVnV29Is&list=PLa370_-deBCQOtfe2OpxuMJZ9C1RC0YJf
+   - Solutions Abroad (no needed to know for this project): EVERY AI Feature you SHOULD KNOW in Power BI // Beginners Guide to Power BI in 2023
 
 
 
