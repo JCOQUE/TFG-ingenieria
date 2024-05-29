@@ -96,25 +96,20 @@ class MyTCN:
         Returns all possible parameters values that the GridSearchCV method. 
         It will try all possible combinations.
         '''
-        # param_grid = dict(input_chunk_length = [4,8,12], 
-        #                    output_chunk_length = [1, 2, 3],
-        #                     n_epochs = [50, 100, 300],
-        #                     dropout = [0.05, 0.1, 0.2, 0.3],
-        #                     dilation_base = [2],
-        #                     weight_norm = [True],
-        #                     kernel_size = [3],
-        #                     num_filters = [6],
-        #                     batch_size = [16 , 32], 
-        #                     loss_fn = [torch.nn.MSELoss()],
-        #                     optimizer_cls = [torch.optim.Adam],
-        #                     optimizer_kwargs = [{'lr': 0.001}, {'lr': 0.01}, {'lr': 0.05}, {'lr': 0.1}],
-        #                     random_state = [None],
-        #                     pl_trainer_kwargs=[{"callbacks": [prog_bar]}])
-
         param_grid = dict(input_chunk_length = [4,8,12], 
                            output_chunk_length = [1, 2, 3],
-        
-       pl_trainer_kwargs=[{"callbacks": [prog_bar]}])
+                            n_epochs = [50, 100, 300],
+                            dropout = [0.05, 0.1, 0.2, 0.3],
+                            dilation_base = [2],
+                            weight_norm = [True],
+                            kernel_size = [3],
+                            num_filters = [6],
+                            batch_size = [16 , 32], 
+                            loss_fn = [torch.nn.MSELoss()],
+                            optimizer_cls = [torch.optim.Adam],
+                            optimizer_kwargs = [{'lr': 0.001}, {'lr': 0.01}, {'lr': 0.05}, {'lr': 0.1}],
+                            random_state = [None],
+                            pl_trainer_kwargs=[{"callbacks": [prog_bar]}])
         
         return param_grid
     
