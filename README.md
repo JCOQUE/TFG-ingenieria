@@ -4,23 +4,23 @@ In this README file, important information about the project will be described, 
 
 ## Repository info
 In this repository you will find:
-- **Desarrollo**: This is where all the code nad code related things are allocated. Inside this folder we have
-   - **codigo**: This is where all the code is saved. There are both: .py files and .ipynb files. The former are the files used in the project and for predictions. The latter have the most important .py info so that it can be understood in a more visual way what are they doing, since the .py might be a little bit long with all the Mlflow and Prefect code. Inside this folder we also have:
-        - **tfg_module**: I've created my own python module to abstract some processes for the .py files. This way: code is reutilized and cleaner code is done.
-        - **Informer2020**: This project uses the Informer algorithm. It is an open source algorithm (not included in pytorch, nor any other ML framework) so to use it, you need to go [here](https://github.com/zhouhaoyi/Informer2020) and download it.
-        - **pickle_models**: Folder where Informer and TCN models are temporary saved to save them later to Mlflow. This is needed since they are not standard frameworks supported by mlflow.
+- **Desarrollo**: This is where all the code and code-related things are store. Inside this folder we have
+   - **codigo**: This is where all the code is saved. There are both: .py files and .ipynb files. The former are the files used in the project and for predictions. The latter have the most important .py info so that it can be understood in a more visual way what are they doing, since the .py might be a little bit long with all the Mlflow and Prefect code. Inside this folder, we also have:
+        - **tfg_module**: I've created my own Python module to abstract some processes for the .py files. This way: code is reutilized and cleaner code is achieved.
+        - **Informer2020**: This project uses the Informer algorithm. It is an open-source algorithm (not included in pytorch, nor any other ML framework) so to use it, you need to go [here](https://github.com/zhouhaoyi/Informer2020) and download it.
+        - **pickle_models**: Folder where Informer and TCN models are temporary saved to be saved later to Mlflow. This is needed since they are not standard frameworks supported by mlflow.
         - **pred_plots**: Folder where predictions of each model (Informer, LightGBM, TCN and XGBoost) for each target (Ventas and Compras) and for each tracked metric (MAE and RMSE) are saved as a png (with the command plt.savefig()). These plots will be used to save them as artifacts in Mlflow along with their respective model.
         - **csv_predictions**: Folder where predictions of each model (Informer, LightGBM, TCN and XGBoost) for each target (Ventas and Compras) and for each tracked metric (MAE and RMSE) are saved as a .csv (with the command plt.to_csv()). These .csv will be used to save them as artifacts in Mlflow along with their respective model.
-  - **datasets**: This folder contains the datasets used in this project. diario.csv is the one used in this project and it is allocated in Azure Blob Storage (see the section below: Azure). Calendario and PGC are used in PowerBI.
-  - **img**: Images used in this projects documentation in section 4. Desarrollo.
-  - **SQL scripts**: (very basic) Commands used in SQL Sever Management Studio.
+  - **datasets**: This folder contains the datasets used in this project. diario.csv is the one used in this project and it is stored in Azure Blob Storage (see the section below: Azure). Calendario and PGC are used in PowerBI.
+  - **img**: Images used in this project's documentation in section 4. Desarrollo.
+  - **SQL scripts**: (very basic) Commands used in SQL Server Management Studio.
   - **requirements.txt**: library requirements in this project.
     
-- **dashboard**: This is where the dashboard, Zebra BI and PureViz (see PowerBI section below) figures and more is allocated.
+- **dashboard**: This is where the dashboard, Zebra BI and PureViz (see PowerBI section below) figures and more is stored.
   
 - **Memoria**: This folder contains the documentation for this project.
-  - **Latex**: Contains .tex for the documentation.
-   - **imgs**: Contains mages used in the documentations.
+  - **Latex**: Contains .tex files for the documentation.
+   - **imgs**: Contains images used in the documentations.
    - **documento.pdf**: Documentation of this project.
      
 - **Teoria**: This folder contains most of the theory applied in this project.
