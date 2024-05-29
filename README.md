@@ -15,7 +15,7 @@ In this repository you will find:
   - **img**: Images used in this projects documentation in section 4. Desarrollo.
   - **SQL scripts**: (very basic) Commands used in SQL Sever Management Studio.
   - **requirements.txt**: library requirements in this project.
-  - 
+    
 - **dashboard**: This is where the dashboard, Zebra BI and PureViz (see PowerBI section below) figures and more is allocated.
   
 - **Memoria**: This folder contains the documentation for this project.
