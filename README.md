@@ -123,7 +123,9 @@ You can create a deployment in prefect with a `.yaml`, with a `.py` with the com
 - Is the function you provided to execute stored in Github (or other storage placed)
 - etc.
 <br>
+
 ![Prefect deloyment](Desarrollo/img/prefect_deployment.png)
+
 <br>
 This is important to keep in mind because I did not expect any interaction when executing this the `prefect deploy` command, and I did not know at first that you could set a .py in Github to execute via CLI.
 ---
