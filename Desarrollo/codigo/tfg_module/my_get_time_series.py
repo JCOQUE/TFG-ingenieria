@@ -2,6 +2,7 @@ from datetime import datetime
 import pandas as pd
 from azure.storage.blob import BlobServiceClient
 import tfg_module.my_dataset_transformations as mdf
+import tfg_module.my_azure as maz
 
 
 def get_ts(target):
@@ -9,27 +10,11 @@ def get_ts(target):
     Returns the time series that the model needs to train
     and predict.
     '''
-    dataset = get_dataset()
+    dataset = maz.get_dataset()
     dataset = mdf.transform_dataset(dataset)
     ts = transform_data_to_ts(dataset, target)
 
     return ts
-    
-
-def get_dataset():
-    '''
-    Fetches via API the raw .csv from Azure Blob Store
-    '''
-    account_name = "blobstoragetfginso"
-    account_key = "gd5nuYRJgr/SLkHdH7PIhh72OLQX/kwKuDlF5yO3grgfrrfyFigneBBd5VJPEuYZC6qlgzTBlvBS+AStpXySag=="
-    connection_string = f"DefaultEndpointsProtocol=https;AccountName={account_name};AccountKey={account_key};EndpointSuffix=core.windows.net"
-    container_name = "containertfginso1"
-    blob_name = "diario.csv"
-
-    blob_service_client = BlobServiceClient.from_connection_string(connection_string)
-    container_client = blob_service_client.get_container_client(container_name)
-    blob_client = container_client.get_blob_client(blob_name)
-    return pd.read_csv(blob_client.download_blob())
 
    
 def transform_data_to_ts(dataset, target):
