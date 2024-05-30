@@ -88,6 +88,8 @@ PowerBI is a data visualization tool. There is no specific reason to have chosen
    - BI Gorilla: Configuring Incremental Refresh in Power BI
 - PowerBI AI features: https://www.youtube.com/watch?v=5URcVnV29Is&list=PLa370_-deBCQOtfe2OpxuMJZ9C1RC0YJf
    - Solutions Abroad (not needed to know for this project): EVERY AI Feature you SHOULD KNOW in Power BI // Beginners Guide to Power BI in 2023
+- KPI Cards : https://www.youtube.com/watch?v=UOnkB1ExYp0
+   - Solutions Abroad : NEXT LEVEL KPI CARD using NO CUSTOM VISUALS // Power BI Tips and Tricks in 2023
 
 > Note: In the Incremental refresh video, pay special attention to minute 4:38.
 ### Git and GitHub
