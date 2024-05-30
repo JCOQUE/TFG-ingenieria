@@ -89,6 +89,7 @@ PowerBI is a data visualization tool. There is no specific reason to have chosen
 - PowerBI AI features: https://www.youtube.com/watch?v=5URcVnV29Is&list=PLa370_-deBCQOtfe2OpxuMJZ9C1RC0YJf
    - Solutions Abroad (not needed to know for this project): EVERY AI Feature you SHOULD KNOW in Power BI // Beginners Guide to Power BI in 2023
 
+> Note: In the Incremental refresh video, pay special attention to minute 4:38.
 ### Git and GitHub
 These popular version control systems (VCS) have been used throughout this project.
 
