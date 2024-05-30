@@ -118,7 +118,7 @@ These popular version control systems (VCS) have been used throughout this proje
 > Note: These commands are appropiate for a type `process` Work-pool. There are other types of Work-pools, and some of these commands might not be  correct.
 
 #### Things to keep in mind
-##### Creating a deploymen in Prefect
+##### Creating a deployment in Prefect
 You can create a deployment in Prefect with a `.yaml`, with a `.py` with the command `.deploy` or via CLI like I explained in the previous section. Keep in mind that doing it via CLI, you'll be asked some question like: 
 - do you want to set a schedule for this deployment?
 - Is the function you provided to execute stored in Github (or other storage place).
