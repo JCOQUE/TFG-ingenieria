@@ -35,7 +35,7 @@ class MyLightGBM:
     def __init__(self, target):
         self.target = target
         self.model_name = 'LightGBM'
-        self.ts = None
+        self.train_ts = None
         self.X = None
         self.y = None
         self.metric = None
@@ -51,8 +51,8 @@ class MyLightGBM:
         the training input and the target as the training output.
         '''
         self.target = mgts.target_cleaned(self.target)
-        self.ts = mgts.get_ts(self.target)
-        self.X, self.y = mpd.create_features(self.ts.copy(), target = self.target, informer = False)
+        self.train_ts = mgts.get_ts(self.target, type = 'train')
+        self.X, self.y = mpd.create_features(self.train_ts.copy(), target = self.target, informer = False)
     
     def create_model(self):
         return lgbm.LGBMRegressor(verbosity = -1)
@@ -62,14 +62,20 @@ class MyLightGBM:
         Returns all possible parameters values that the GridSearchCV method. 
         It will try all possible combinations.
         '''
+        # param_grid = {  
+        #                 'n_estimators': [50, 100, 300, 500, 1000],
+        #                 'num_leaves': [2, 4, 6, 8, 10],
+        #                 'max_depth': [2, 5, 7, 10],
+        #                 'learning_rate': [0.001, 0.01, 0.05, 0.1],
+        #                 'boosting_type': ['gbdt', 'dart', 'rf'],
+        #                 'colsample_bytree': [0.3,  0.7],
+        #                 'random_state': [None]
+        #             }
+
         param_grid = {  
-                        'n_estimators': [50, 100, 300, 500, 1000],
-                        'num_leaves': [2, 4, 6, 8, 10],
-                        'max_depth': [2, 5, 7, 10],
-                        'learning_rate': [0.001, 0.01, 0.05, 0.1],
-                        'boosting_type': ['gbdt', 'dart', 'rf'],
-                        'colsample_bytree': [0.3,  0.7],
-                        'random_state': [None]
+                        'n_estimators': [10],
+                        'num_leaves': [2]
+                        
                     }
         
         return param_grid
@@ -168,7 +174,7 @@ class MyLightGBM:
         a pandas DataFrame.
         '''
         best_metric_model = self.best_results.loc['model', metric]
-        predictions = mf.get_pred_df(self.ts, best_metric_model)
+        predictions = mf.get_pred_df(self.train_ts, best_metric_model)
         return predictions
 
     
@@ -181,7 +187,7 @@ class MyLightGBM:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
-        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
+        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.train_ts, predictions, metric) # it does not show the pred because plt.show() is commented.
                                                    
 
     def get_current_time(self):

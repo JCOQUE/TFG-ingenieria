@@ -9,7 +9,7 @@ This .py is in charge of pulling and pushing files from Azure Blob Storge
 Guardar credenciales en Prefect??????
 '''
 
-def get_dataset():
+def get_dataset(type = 'train'):
     '''
     Fetches via API the raw .csv from Azure Blob Store
     '''
@@ -17,7 +17,14 @@ def get_dataset():
     account_key = "gd5nuYRJgr/SLkHdH7PIhh72OLQX/kwKuDlF5yO3grgfrrfyFigneBBd5VJPEuYZC6qlgzTBlvBS+AStpXySag=="
     connection_string = f"DefaultEndpointsProtocol=https;AccountName={account_name};AccountKey={account_key};EndpointSuffix=core.windows.net"
     container_name = "containertfginso1"
-    blob_name = "diario.csv"
+    if type == 'train':
+        blob_name = "diario.csv"
+    elif type == 'test':
+        blob_name = 'test.csv'
+    else:
+        raise ValueError('Incorrect type provided. Type can be either train or test.')
+        
+    
 
     blob_service_client = BlobServiceClient.from_connection_string(connection_string)
     container_client = blob_service_client.get_container_client(container_name)

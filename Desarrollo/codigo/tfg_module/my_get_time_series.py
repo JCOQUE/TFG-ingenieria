@@ -5,12 +5,12 @@ import tfg_module.my_dataset_transformations as mdf
 import tfg_module.my_azure as maz
 
 
-def get_ts(target):
+def get_ts(target, type = 'train'):
     '''
     Returns the time series that the model needs to train
     and predict.
     '''
-    dataset = maz.get_dataset()
+    dataset = maz.get_dataset(type)
     dataset = mdf.transform_dataset(dataset)
     ts = transform_data_to_ts(dataset, target)
 

@@ -34,7 +34,7 @@ class MyXGBoost:
     def __init__(self, target):
         self.target = target
         self.model_name = 'XGBoost'
-        self.ts = None
+        self.train_ts = None
         self.X = None
         self.y = None
         self.metric = None
@@ -49,9 +49,9 @@ class MyXGBoost:
         the training input and the target as the training output.
         '''
         self.target = mgts.target_cleaned(self.target)
-        self.ts = mgts.get_ts(self.target)
-        print(self.ts.tail(20))
-        self.X, self.y = mpd.create_features(self.ts.copy(), target = self.target, informer = False)
+        self.train_ts = mgts.get_ts(self.target, type = 'train')
+        print(self.train_ts.tail(20))
+        self.X, self.y = mpd.create_features(self.train_ts.copy(), target = self.target, informer = False)
     
     def create_model(self):
         return xgb.XGBRegressor()
@@ -73,6 +73,7 @@ class MyXGBoost:
                         'random_state': [None]
                     }
                             
+
         return param_grid
     
     
@@ -167,7 +168,7 @@ class MyXGBoost:
         a pandas DataFrame.
         '''
         best_metric_model = self.best_results.loc['model', metric]
-        predictions = mf.get_pred_df(self.ts, best_metric_model)
+        predictions = mf.get_pred_df(self.train_ts, best_metric_model)
         return predictions
 
     def save_predictions_to_csv(self, predictions, metric):
@@ -180,7 +181,7 @@ class MyXGBoost:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
-        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
+        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.train_ts, predictions, metric) # it does not show the pred because plt.show() is commented.
 
     def get_current_time(self):
         '''

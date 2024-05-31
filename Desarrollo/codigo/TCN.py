@@ -44,8 +44,8 @@ class MyTCN:
     def __init__(self, target):
         self.target = target
         self.model_name = 'TCN'
-        self.ts_df = None
-        self.ts = None
+        self.train_ts_df = None
+        self.train_ts = None
         self.best_results = None
         self.mae_pred_df = None
         self.mae_pred_df = None
@@ -56,26 +56,26 @@ class MyTCN:
         TimeSeries object to work with the TCN Darts library.
         '''
         self.target = mgts.target_cleaned(self.target)
-        self.ts_df = mgts.get_ts(self.target)
-        self.ts = TimeSeries.from_dataframe(self.ts_df.copy(), time_col='date', value_cols=[self.target])
+        self.train_ts_df = mgts.get_ts(self.target, type = 'train')
+        self.train_ts = TimeSeries.from_dataframe(self.train_ts_df.copy(), time_col='date', value_cols=[self.target])
     
-    def get_train_test_index(self, ts):
+    def get_train_val_index(self, ts):
         '''
         Returns the index by which the time series is splitted in train 
-        and test.
+        and val.
         '''
         return int(len(ts) * 0.8)
 
-    def get_train_test(self):
+    def get_train_val(self):
         '''
         Since the library Darts has its own GridSearch method (it does not
         use the GridSearchCV method from the library sklearn), instead of
-        cross validations, train test split is performed.
+        cross validations, train val split is performed.
         '''
-        split_index = self.get_train_test_index(self.ts)
-        train = self.ts[:split_index]
-        test = self.ts[split_index:]
-        return train, test
+        split_index = self.get_train_val_index(self.train_ts)
+        train = self.train_ts[:split_index]
+        validation = self.train_ts[split_index:]
+        return train, validation
     
     
     def create_model(self):
@@ -114,7 +114,7 @@ class MyTCN:
         return param_grid
     
     
-    def train(self, train, test):
+    def train(self, train, val):
         '''
         Since the the .gridsearch method from Darts library cannot
         track two metrics when training (like GridSearchCV from sklearn does),
@@ -125,16 +125,16 @@ class MyTCN:
         
         mae_model = tcn_model.gridsearch(parameters=param_grid, 
                                             series= train, 
-                                            val_series= test,  metric = mae)
+                                            val_series= val,  metric = mae)
         rmse_model = tcn_model.gridsearch(parameters=param_grid, 
                                             series= train, 
-                                            val_series= test,  metric = rmse)
+                                            val_series= val,  metric = rmse)
         print('Training completed')
         
         return mae_model, rmse_model
     
 
-    def save_best_results(self, train, test, mae_model, rmse_model):
+    def save_best_results(self, train, val, mae_model, rmse_model):
         '''
         For all the results obtained in the training with GridSearch, this function
         saves the model with best MAE metric, with its metrics, its parameters and its 
@@ -146,13 +146,13 @@ class MyTCN:
         for metrica, MODELO in modelos.items():
             best_score = round(float(MODELO[2]),2)
             best_model = MODELO[0]
-            best_model.fit(train, val_series = test, verbose = False)
+            best_model.fit(train, val_series = val, verbose = False)
             best_params = MODELO[1]
             if metrica == 'best_MAE':
-                rmse_in_mae_model = round(float(rmse(mae_model[0].predict(n =len(test), series = train), test)),2)
+                rmse_in_mae_model = round(float(rmse(mae_model[0].predict(n =len(val), series = train), val)),2)
                 best_results[metrica] = (best_model, best_params, best_score, rmse_in_mae_model)
             else:
-                mae_in_rmse_model = round(float(mae(rmse_model[0].predict(n =len(test), series = train), test)),2)
+                mae_in_rmse_model = round(float(mae(rmse_model[0].predict(n =len(val), series = train), val)),2)
                 best_results[metrica] = (best_model, best_params, mae_in_rmse_model, best_score)
 
         self.best_results_to_df(best_results)
@@ -176,7 +176,7 @@ class MyTCN:
         the library Darts is a bit different.
         '''
         best_metric_model = self.best_results.loc['model',metric]
-        predictions = best_metric_model.predict(n= 12, series = self.ts[:-1])
+        predictions = best_metric_model.predict(n= 12, series = self.train_ts[:-1])
         return predictions
     
     def predictions_to_df(self, predictions):
@@ -190,7 +190,7 @@ class MyTCN:
         pred_df.rename(columns = {self.target:'pred'}, inplace = True)
         pred_df['pred'] = pred_df['pred'].round(2)
         pred_df.reset_index(inplace = True)
-        pred_df.loc[pred_df.index[0], 'pred'] = self.ts_df[self.ts_df.columns[1]].iloc[-1]
+        pred_df.loc[pred_df.index[0], 'pred'] = self.train_ts_df[self.train_ts_df.columns[1]].iloc[-1]
         return pred_df
     
     def save_predictions_to_csv(self, predictions, metric):
@@ -202,7 +202,7 @@ class MyTCN:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
-        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.ts_df, predictions, metric) # it does not show the pred because plt.show() is commented.
+        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.train_ts_df, predictions, metric) # it does not show the pred because plt.show() is commented.
 
     def get_current_time(self):
         '''
@@ -237,7 +237,7 @@ class MyTCN:
             with mlflow.start_run(run_name =f'{metric}'):
                 mlflow.set_tag('model_name', f'{self.model_name}_{metric}')
                 mlflow.set_tag('Time', f'{current_time}')
-                mlflow_dataset = mlflow.data.from_pandas(self.ts_df.head(1)) # since I log the schema with a row is enough
+                mlflow_dataset = mlflow.data.from_pandas(self.train_ts_df.head(1)) # since I log the schema with a row is enough
                 mlflow.log_input(mlflow_dataset, context = 'Input')
                 self.save_model_to_pickle(metric)
                 mlflow.log_artifact(f"{ABS_PATH_PICKLE_MODELS}/{self.model_name}_{self.target}_{metric}.pkl",
@@ -267,19 +267,19 @@ def set_attributes(tcn):
     print('Setting attributes...')
     tcn.setting_attributes()
 
-@task(task_run_name = 'Get train test', log_prints = True, retries = 2)
-def get_train_test(tcn):
-    return tcn.get_train_test()
+@task(task_run_name = 'Get train validation', log_prints = True, retries = 2)
+def get_train_val(tcn):
+    return tcn.get_train_val()
 
 @task(task_run_name = 'Train', log_prints = True, retries = 2)
-def fit(tcn, train, test):
+def fit(tcn, train, val):
     print('Training...')
-    return tcn.train(train, test)  
+    return tcn.train(train, val)  
 
 @task(task_run_name = 'Save best results', log_prints = True, retries = 2)
-def save_best_results(tcn, train, test, best_mae_model, best_rmse_model):
+def save_best_results(tcn, train, val, best_mae_model, best_rmse_model):
     print('Saving best results...')
-    tcn.save_best_results(train, test, best_mae_model, best_rmse_model)
+    tcn.save_best_results(train, val, best_mae_model, best_rmse_model)
 
 @task(task_run_name = 'Make predictions {model}', log_prints = True, retries = 2)
 def make_predictions(tcn, model):
@@ -313,9 +313,9 @@ def run(target):
         my_tcn = MyTCN(target=target) 
         set_attributes(my_tcn)
 
-        train, test = get_train_test(my_tcn)
-        mae_model, rmse_model = fit(my_tcn, train, test)
-        save_best_results(my_tcn, train, test, mae_model, rmse_model)
+        train, val = get_train_val(my_tcn)
+        mae_model, rmse_model = fit(my_tcn, train, val)
+        save_best_results(my_tcn, train, val, mae_model, rmse_model)
 
         mae_predictions = make_predictions(my_tcn, 'best_MAE')
         predictions_df = predictions_to_df(my_tcn, mae_predictions)

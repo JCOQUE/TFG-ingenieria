@@ -24,8 +24,7 @@ def add_grupo(asiento):
                                 '7': '700',
                                 '8':'800',
                                 '9': '900'}
-    first_account_number = asiento['NoCuenta'][:1]
-    
+    first_account_number = asiento['NoCuenta'][:1]    
     return grupos_plan_general_contable[first_account_number]
 
 

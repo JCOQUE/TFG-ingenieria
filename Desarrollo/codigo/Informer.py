@@ -142,8 +142,8 @@ class MyInformer:
         that should not be changed.
         '''
         self.target = mgts.target_cleaned(self.target)
-        self.ts = mgts.get_ts(self.target)
-        self.X, self.y = mpd.create_features(self.ts.copy(), target=self.target, informer=True)
+        self.train_ts = mgts.get_ts(self.target, type = 'train')
+        self.X, self.y = mpd.create_features(self.train_ts.copy(), target=self.target, informer=True)
         self.seq_len = 12  # since it is montly data, use the past 12 values for prediction
         self.label_len = 12  # steps introduced in the decoder to start generating forecast. Usually seq_len = label_len
         self.pred_len = 12  # We want one year prediction,  and our data is monthly data
@@ -157,12 +157,13 @@ class MyInformer:
         Returns all possible parameters values that the GridSearchCV method. 
         It will try all possible combinations.
         '''
-        param_grid = {
-            'n_heads': [2, 4, 6, 8],
-            'dropout': [0.05, 0.1, 0.2, 0.3],
-            'learning_rate': [0.001, 0.01, 0.05, 0.1],
-            'num_epochs': [50, 100, 300, 500]
-        }
+        # param_grid = {
+        #     'n_heads': [2, 4, 6, 8],
+        #     'dropout': [0.05, 0.1, 0.2, 0.3],
+        #     'learning_rate': [0.001, 0.01, 0.05, 0.1],
+        #     'num_epochs': [50, 100, 300, 500]
+        # }
+        param_grid = {'n_heads': [2], 'learning_rate' : [0.1]}
 
         return param_grid
     
@@ -251,7 +252,7 @@ class MyInformer:
         a pandas DataFrame. These predictions are 12 months ahead.
         '''
         best_metric_model = self.best_results.loc['model', metric]
-        predictions = mf.get_pred_df(self.ts, best_metric_model, informer=True)
+        predictions = mf.get_pred_df(self.train_ts, best_metric_model, informer=True)
         return predictions
 
     def save_predictions_to_csv(self, predictions, metric):
@@ -263,7 +264,7 @@ class MyInformer:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_mae.csv')
         else:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
-        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.ts, predictions, metric) # it does not show the pred because plt.show() is commented.
+        mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.train_ts, predictions, metric) # it does not show the pred because plt.show() is commented.
 
     def get_current_time(self):
         '''
