@@ -62,20 +62,14 @@ class MyLightGBM:
         Returns all possible parameters values that the GridSearchCV method. 
         It will try all possible combinations.
         '''
-        # param_grid = {  
-        #                 'n_estimators': [50, 100, 300, 500, 1000],
-        #                 'num_leaves': [2, 4, 6, 8, 10],
-        #                 'max_depth': [2, 5, 7, 10],
-        #                 'learning_rate': [0.001, 0.01, 0.05, 0.1],
-        #                 'boosting_type': ['gbdt', 'dart', 'rf'],
-        #                 'colsample_bytree': [0.3,  0.7],
-        #                 'random_state': [None]
-        #             }
-
         param_grid = {  
-                        'n_estimators': [10],
-                        'num_leaves': [2]
-                        
+                        'n_estimators': [50, 100, 300, 500, 1000],
+                        'num_leaves': [2, 4, 6, 8, 10],
+                        'max_depth': [2, 5, 7, 10],
+                        'learning_rate': [0.001, 0.01, 0.05, 0.1],
+                        'boosting_type': ['gbdt', 'dart', 'rf'],
+                        'colsample_bytree': [0.3,  0.7],
+                        'random_state': [None]
                     }
         
         return param_grid

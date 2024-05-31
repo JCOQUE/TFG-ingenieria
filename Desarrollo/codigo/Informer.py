@@ -157,13 +157,12 @@ class MyInformer:
         Returns all possible parameters values that the GridSearchCV method. 
         It will try all possible combinations.
         '''
-        # param_grid = {
-        #     'n_heads': [2, 4, 6, 8],
-        #     'dropout': [0.05, 0.1, 0.2, 0.3],
-        #     'learning_rate': [0.001, 0.01, 0.05, 0.1],
-        #     'num_epochs': [50, 100, 300, 500]
-        # }
-        param_grid = {'n_heads': [2], 'learning_rate' : [0.1]}
+        param_grid = {
+            'n_heads': [2, 4, 6, 8],
+            'dropout': [0.05, 0.1, 0.2, 0.3],
+            'learning_rate': [0.001, 0.01, 0.05, 0.1],
+            'num_epochs': [50, 100, 300, 500]
+        }
 
         return param_grid
     
