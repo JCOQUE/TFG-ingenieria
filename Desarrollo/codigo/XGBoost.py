@@ -50,7 +50,6 @@ class MyXGBoost:
         '''
         self.target = mgts.target_cleaned(self.target)
         self.train_ts = mgts.get_ts(self.target, type = 'train')
-        print(self.train_ts.tail(20))
         self.X, self.y = mpd.create_features(self.train_ts.copy(), target = self.target, informer = False)
     
     def create_model(self):
@@ -72,8 +71,8 @@ class MyXGBoost:
                         'colsample_bytree': [0.3, 0.7],
                         'random_state': [None]
                     }
-                            
 
+                        
         return param_grid
     
     

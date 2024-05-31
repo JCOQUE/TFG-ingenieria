@@ -333,4 +333,4 @@ def run(target):
 
 
 if __name__ == '__main__':
-    run('Compras')
+    run('Ventas')
