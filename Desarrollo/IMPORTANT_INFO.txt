@@ -30,3 +30,7 @@ El tfg esta lleno de plus: transformers, codigo limpio, dagshub, etc
 El repositorio de github es publico pero el de dagshub no
 
 Todo herramientas que se utilizan en el ambito laboral y que no han sido explicadads en la universidad (prefect, mlflow, azure, powerBI)
+
+
+Para la videodefensa, estudiarse los distintos tipos de  graficos. Es decir, por ejemlo, en Principal, el scatter tiene la opcion
+de poder dividirlo en clusters, en Analisis, el grafico de  barras, tiene una flecha a la derecha para cambiar de grafico, etc
