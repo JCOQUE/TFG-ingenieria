@@ -26,6 +26,7 @@ In this repository you will find:
 - **Teoria**: This folder contains most of the theory applied in this project.
   - **papers**: Most relevant papers separated by algorithms.
    - **Contabilidad**: Accounting info is saved in here.
+> Note: The `.py` can follow any structure that you want. You can rename functions, add new ones, substract, etc. Just  make sure you use the tfg_module correctly. Another thing to note is that if you want to recreate this, with the same algorithms, since they are very have a very similar structure with very similar methods, you could create a new class for all of them. It was done this way to have them perfectly seperated from one another.
 ## Tools
 In this section, the software tools along with some information sources will be discussed.
 
@@ -90,6 +91,8 @@ PowerBI is a data visualization tool. There is no specific reason to have chosen
    - Solutions Abroad (not needed to know for this project): EVERY AI Feature you SHOULD KNOW in Power BI // Beginners Guide to Power BI in 2023
 - KPI Cards : https://www.youtube.com/watch?v=UOnkB1ExYp0
    - Solutions Abroad : NEXT LEVEL KPI CARD using NO CUSTOM VISUALS // Power BI Tips and Tricks in 2023
+- PowerBI backgroud: https://www.youtube.com/watch?v=mxkacatPYog&t=921s
+   - How to Power BI: The ultimate HACK for a quick REPORT DESIGN | Create STUNNING Report BACKGROUNDS in Power BI
 
 > Note: In the Incremental refresh video, pay special attention to minute 4:38.
 ### Git and GitHub
