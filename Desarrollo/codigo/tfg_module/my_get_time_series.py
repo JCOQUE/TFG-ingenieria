@@ -100,7 +100,7 @@ def  get_target_prct_estimation(dataset, target, actual_day, actual_month, actua
     If the day exceeds the limit_day, it returns the corresponding prct. Otherwise -1 indicating
     that this month will be predicted. This logic is done in the set_estimation_logic() below.
     '''
-    LIMIT_DAY = 10
+    LIMIT_DAY = 20
     dataset = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]
     if actual_day < LIMIT_DAY:
         return -1
