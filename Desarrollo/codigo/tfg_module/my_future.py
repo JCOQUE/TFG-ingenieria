@@ -37,10 +37,10 @@ def get_pred_df(ts, model, informer = False):
     df = pd.DataFrame()
     df['date'] = get_future_dates(ts)
     df['pred'] = np.around(model.predict(X_pred),2)
-    df = concatante_past_future_values(ts, df)
+    df = concatanate_past_future_values(ts, df)
     return df
 
-def concatante_past_future_values(ts, df):
+def concatanate_past_future_values(ts, df):
     '''
     Concatanates the last time series value with 
     the first predicted value.

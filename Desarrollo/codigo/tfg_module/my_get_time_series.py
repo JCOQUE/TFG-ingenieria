@@ -23,8 +23,7 @@ def transform_data_to_ts(dataset, target, type):
     then month.
     '''
     dataset['Fecha'] = pd.to_datetime(dataset['Fecha'], format='%d/%m/%Y')
-    if type == 'train':
-        month_prct_estimation = month_prct_target_estimation(dataset.copy(), target)
+    month_prct_estimation = month_prct_target_estimation(dataset.copy(), target)
     dataset.sort_values('Fecha', ascending = True, inplace = True)
     dataset['Year'] = dataset['Fecha'].dt.year
     dataset['Month'] = dataset['Fecha'].dt.month
@@ -39,8 +38,7 @@ def transform_data_to_ts(dataset, target, type):
         ts.iloc[0,0] = ts[(ts['date'].dt.month == 9) & (ts['date'].dt.year > 2017)]['Compras'].mean()
 
     ts = change_order_columns(ts)
-    if type =='train':
-        ts = set_estimation_logic(ts, target, month_prct_estimation)   
+    ts = set_estimation_logic(ts, target, month_prct_estimation)   
     ts[target] = ts[target].round(2).astype('float32')
     return ts 
 
@@ -103,7 +101,7 @@ def  get_target_prct_estimation(dataset, target, actual_day, actual_month, actua
     If the day exceeds the limit_day, it returns the corresponding prct. Otherwise -1 indicating
     that this month will be predicted. This logic is done in the set_estimation_logic() below.
     '''
-    LIMIT_DAY = 10
+    LIMIT_DAY = 15
     dataset = dataset[dataset['NoGrupo'] == (get_filtered_target(target))]
     if actual_day < LIMIT_DAY:
         return -1

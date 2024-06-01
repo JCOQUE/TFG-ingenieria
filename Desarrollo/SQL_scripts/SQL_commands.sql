@@ -17,7 +17,8 @@ CREATE TABLE diarioDB (
     Entidad VARCHAR(100),
     Compras DECIMAL(18,2),
     Ventas DECIMAL(18,2),
-    NoGrupo VARCHAR(50)
+    NoGrupo VARCHAR(50),
+	type VARCHAR(20)
 );
 GO
 
