@@ -108,8 +108,11 @@ These popular version control systems (VCS) have been used throughout this proje
 - `git status`
 - `git add .`
 - `git commit -m '<commit_message>'`
-- `git pull origin main`
-- `git push origin main`
+- `git branch test`
+- `git switch <branch_name>` 
+- `git pull origin <branch_name>`
+- `git push origin <branch_name>`
+
 
 ##### Prefect
 - `prefect init cloud`  (you should have created a Prefect account previously)
