@@ -154,7 +154,7 @@ class MyInformer:
     
     def get_param_grid(self):
         '''
-        Returns all possible parameters values that the GridSearchCV method. 
+        Returns all possible parameters values for GridSearchCV method. 
         It will try all possible combinations.
         '''
         param_grid = {

@@ -12,18 +12,19 @@ def get_ts(target, type = 'train'):
     '''
     dataset = maz.get_dataset(type)
     dataset = mdf.transform_dataset(dataset)
-    ts = transform_data_to_ts(dataset, target)
+    ts = transform_data_to_ts(dataset, target, type)
 
     return ts
 
    
-def transform_data_to_ts(dataset, target):
+def transform_data_to_ts(dataset, target, type):
     '''
     This function transforms the dataset into a time series grouped by year and
     then month.
     '''
     dataset['Fecha'] = pd.to_datetime(dataset['Fecha'], format='%d/%m/%Y')
-    month_prct_estimation = month_prct_target_estimation(dataset.copy(), target)
+    if type =='train':
+        month_prct_estimation = month_prct_target_estimation(dataset.copy(), target)
     dataset['Year'] = dataset['Fecha'].dt.year
     dataset['Month'] = dataset['Fecha'].dt.month
     ts = dataset.groupby(['Year', 'Month']).agg({target: 'sum'})
@@ -32,12 +33,14 @@ def transform_data_to_ts(dataset, target):
     ts.set_index(dates, inplace = True)
     ts['date'] = ts.index
     ts.reset_index(drop = True,inplace = True) 
-    if target == "Compras":
+    
+    if target == "Compras" and type =='train':
         #because there are no purchases in the first month of september since the first data is on day 25
         ts.iloc[0,0] = ts[(ts['date'].dt.month == 9) & (ts['date'].dt.year > 2017)]['Compras'].mean()
 
     ts = change_order_columns(ts)
-    ts = set_estimation_logic(ts, target, month_prct_estimation)   
+    if type =='train':
+        ts = set_estimation_logic(ts, target, month_prct_estimation)   
     ts[target] = ts[target].round(2).astype('float32')
     return ts 
 
