@@ -2,7 +2,8 @@
   <img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" style = "width:50%;">
 </p>
 
-    
+Welcome to my final major project :)
+
 # Intro
 
 In this README file, important information about the project will be described, such as links where the core information has been found, important aspects to keep in mind when modifying the code, and other things. All this will be organized by the tools used in the project, such as PowerBI, Azure, etc.
