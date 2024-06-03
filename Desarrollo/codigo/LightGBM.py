@@ -71,7 +71,6 @@ class MyLightGBM:
                         'colsample_bytree': [0.3,  0.7],
                         'random_state': [None]
                     }
-        
         return param_grid
     
     
