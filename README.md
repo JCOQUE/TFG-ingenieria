@@ -1,4 +1,4 @@
-![Prefect deloyment](Memoria/imgs/Arquitectura.png)
+![Prefect deployment](Memoria/imgs/Arquitectura.png){width=70%}
 
 
 # Intro
