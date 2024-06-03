@@ -1,4 +1,4 @@
-<div style="text-align: center;">
+<div style="display: flex; justify-content: center;">
     <img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" style="width:50%;">
 </div>
 
