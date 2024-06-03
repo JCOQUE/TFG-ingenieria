@@ -1,5 +1,5 @@
 <div style="text-align: center;">
-    <img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" width="600"/>
+    <img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" style="width:50%;">
 </div>
 
 
