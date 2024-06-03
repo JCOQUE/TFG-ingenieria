@@ -1,7 +1,7 @@
+<p align="center">
+  <img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" width:50%;">
+</p>
 
-<div style="display: flex; justify-content: center;">
-<img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" style="display: block; margin: auto; width:50%;">
-</div>
     
 # Intro
 
