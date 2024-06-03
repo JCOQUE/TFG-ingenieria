@@ -1,4 +1,4 @@
-![Prefect deployment](Memoria/imgs/Arquitectura.png){width=70%}
+<img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" width="200"/>
 
 
 # Intro
