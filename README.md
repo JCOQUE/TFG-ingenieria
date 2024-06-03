@@ -1,4 +1,6 @@
-<img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" width="500"/>
+<div style="text-align: center;">
+    <img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" width="600"/>
+</div>
 
 
 # Intro
