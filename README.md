@@ -91,7 +91,7 @@ PowerBI is a data visualization tool. There is no specific reason to have chosen
    - Solutions Abroad (not needed to know for this project): EVERY AI Feature you SHOULD KNOW in Power BI // Beginners Guide to Power BI in 2023
 - KPI Cards : https://www.youtube.com/watch?v=UOnkB1ExYp0
    - Solutions Abroad : NEXT LEVEL KPI CARD using NO CUSTOM VISUALS // Power BI Tips and Tricks in 2023
-- PowerBI backgroud: https://www.youtube.com/watch?v=mxkacatPYog&t=921s
+- PowerBI background: https://www.youtube.com/watch?v=mxkacatPYog&t=921s
    - How to Power BI: The ultimate HACK for a quick REPORT DESIGN | Create STUNNING Report BACKGROUNDS in Power BI
 
 > Note: In the Incremental refresh video, pay special attention to minute 4:38.
