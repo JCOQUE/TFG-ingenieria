@@ -181,7 +181,7 @@ class MyLightGBM:
         else:
             predictions.to_csv(f'{ABS_PATH_CSV}/{self.model_name}_{self.target}_best_rmse.csv')
         mf.save_pred_plot(ABS_PATH_PLOT, self.model_name, self.train_ts, predictions, metric) # it does not show the pred because plt.show() is commented.
-                                                   
+
 
     def get_current_time(self):
         '''
@@ -276,7 +276,7 @@ def mlflow_connect(lgbm):
 def save_mlflow(lgbm):
     print('Saving to mlflow...')
     lgbm.save_mlflow()
- 
+
 @flow(flow_run_name='LightGBM {target}', retries = 2)
 def run(target):
         my_lgbm = MyLightGBM(target = target)
