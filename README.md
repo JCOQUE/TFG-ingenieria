@@ -9,7 +9,7 @@ Welcome to my final major project :)
 In this README file, important information about the project will be described, such as links where the core information has been found, important aspects to keep in mind when modifying the code, and other things. All this will be organized by the tools used in the project, such as PowerBI, Azure, etc.
 
 ## Repository info
-In this repository you will find:
+In this repository you will find the following folders:
 - **Desarrollo**: This is where all the code and code-related things are store. Inside this folder we have
    - **codigo**: This is where all the code is saved. There are both: .py files and .ipynb files. The former are the files used in the project and for predictions. The latter have the most important .py info so that it can be understood in a more visual way what are they doing, since the .py might be a little bit long with all the Mlflow and Prefect code. Inside this folder, we also have:
         - **tfg_module**: I've created my own Python module to abstract some processes for the .py files. This way: code is reutilized and cleaner code is achieved.
