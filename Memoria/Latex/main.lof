@@ -1,0 +1,96 @@
+\contentsline {figure}{\numberline {2.1}{\ignorespaces Ejemplo balance general. \emph {LP = largo plazo, \hspace {0,1cm} CP = corto plazo}.}}{19}{figure.caption.2}%
+\contentsline {figure}{\numberline {2.2}{\ignorespaces Secciones del Plan General Contable español. \scriptsize {Fuente: \url {https://www.plangeneralcontable.com}}}}{21}{figure.caption.3}%
+\contentsline {figure}{\numberline {2.3}{\ignorespaces Estructura de una cuenta en el Libro Mayor.}}{22}{figure.caption.4}%
+\contentsline {figure}{\numberline {2.4}{\ignorespaces Ejemplo cuentas activo y pasivo Libro Mayor.}}{22}{figure.caption.5}%
+\contentsline {figure}{\numberline {2.5}{\ignorespaces Ejemplo cuentas compra/gasto y venta/ingreso Libro Mayor.}}{23}{figure.caption.6}%
+\contentsline {figure}{\numberline {2.6}{\ignorespaces Estructura de un asiento contable.}}{24}{figure.caption.7}%
+\contentsline {figure}{\numberline {2.7}{\ignorespaces Ejemplo transacción básica Libro Diario y Libro Mayor.}}{24}{figure.caption.8}%
+\contentsline {figure}{\numberline {2.8}{\ignorespaces Ejemplo de serie temporal con tendencia ascendente.}}{26}{figure.caption.9}%
+\contentsline {figure}{\numberline {2.9}{\ignorespaces Ejemplo de serie temporal con estacionalidad.}}{26}{figure.caption.10}%
+\contentsline {figure}{\numberline {2.10}{\ignorespaces Ejemplo del componente cíclico.}}{27}{figure.caption.11}%
+\contentsline {figure}{\numberline {2.11}{\ignorespaces Ruido.}}{27}{figure.caption.12}%
+\contentsline {figure}{\numberline {2.12}{\ignorespaces Componentes de una serie temporal por separado.}}{28}{figure.caption.13}%
+\contentsline {figure}{\numberline {2.13}{\ignorespaces Ejemplo sencillo aplicando árboles de decisión para un problema de regresión.}}{32}{figure.caption.14}%
+\contentsline {figure}{\numberline {2.14}{\ignorespaces Algoritmo de GBM de Friedman. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {GBMtutorial}}}}{33}{figure.caption.15}%
+\contentsline {figure}{\numberline {2.15}{\ignorespaces Ejemplo de dos modelos simples de árboles de decisión. Estos modelos se añaden para generar un resultado final. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {XGBoost}}}}{34}{figure.caption.16}%
+\contentsline {figure}{\numberline {2.16}{\ignorespaces Relación entre inteligencia artificial, aprendizaje automático y aprendizaje profundo.}}{37}{figure.caption.17}%
+\contentsline {figure}{\numberline {2.17}{\ignorespaces Ejemplo arquitectura de un perceptrón multi-capa con dos capas ocultas.}}{38}{figure.caption.18}%
+\contentsline {figure}{\numberline {2.18}{\ignorespaces Mientras que la atención del Transformer original puede asignar una alta dependencia entre los dos datos señalados en la figura de la izquierda, una atención local puede percibir mejor las formas de la serie temporal (figura de la derecha). \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {logSparse}}}}{41}{figure.caption.19}%
+\contentsline {figure}{\numberline {2.19}{\ignorespaces Arquitectura Informer. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {informer}}}}{42}{figure.caption.20}%
+\contentsline {figure}{\numberline {2.20}{\ignorespaces Input y tres primeras capas del Encoder en el Informer. Nótese cómo se va reduciendo la dimensionalidad ($L$) de las capas de atención (rojo) a la mitad. Esto se consigue con un MaxPooling de $2\times 2$. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {informer}}}}{43}{figure.caption.21}%
+\contentsline {figure}{\numberline {2.21}{\ignorespaces Ejemplo entre una secuencia input y cómo se obtiene la secuencia de output a través de la operación de convolución.}}{44}{figure.caption.22}%
+\contentsline {figure}{\numberline {2.22}{\ignorespaces Convolución con zero-padding. Se obvia la convolución para hacerlo más claro.}}{45}{figure.caption.23}%
+\contentsline {figure}{\numberline {2.23}{\ignorespaces Ejemplo de inviabilidad al aumentar capas.}}{45}{figure.caption.24}%
+\contentsline {figure}{\numberline {2.24}{\ignorespaces Dilatación. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {waveNet}}}}{46}{figure.caption.25}%
+\contentsline {figure}{\numberline {2.25}{\ignorespaces Bloque Residual TCN. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {TCNSeq}}}}{46}{figure.caption.26}%
+\contentsline {figure}{\numberline {4.1}{\ignorespaces Arquitectura software del proyecto.}}{54}{figure.caption.27}%
+\contentsline {figure}{\numberline {4.2}{\ignorespaces Carpeta tfg\_module (izquierda) junto a su contenido (derecha).}}{56}{figure.caption.28}%
+\contentsline {figure}{\numberline {4.3}{\ignorespaces Ejemplo abstracción código con tfg\_module.}}{57}{figure.caption.29}%
+\contentsline {figure}{\numberline {4.4}{\ignorespaces Importación tfg\_module.}}{58}{figure.caption.30}%
+\contentsline {figure}{\numberline {4.5}{\ignorespaces Procesamiento de los datos y creación de los modelos.}}{58}{figure.caption.31}%
+\contentsline {figure}{\numberline {4.6}{\ignorespaces División entrenamiento TCN.}}{59}{figure.caption.32}%
+\contentsline {figure}{\numberline {4.7}{\ignorespaces División entrenamiento XGBoost, LightGBM e Informer.}}{59}{figure.caption.33}%
+\contentsline {figure}{\numberline {4.8}{\ignorespaces Mlflow alojado en Dagshub.}}{61}{figure.caption.34}%
+\contentsline {figure}{\numberline {4.9}{\ignorespaces Proceso de vinculación entre el repositorio de Github con el Dagshub.}}{62}{figure.caption.35}%
+\contentsline {figure}{\numberline {4.10}{\ignorespaces Comandos para conectarse a Dagshub y alojar modelos en Mlflow}}{63}{figure.caption.36}%
+\contentsline {figure}{\numberline {4.11}{\ignorespaces Ejemplo de modelos almacenados (best\_MAE y best\_RMSE) para el Experimento ``Compras LightGBM".}}{64}{figure.caption.37}%
+\contentsline {figure}{\numberline {4.12}{\ignorespaces Modelo almacenado en Mlflow, junto con la gráfica, datos de predicciones y el respectivo link para recuperarlo.}}{64}{figure.caption.38}%
+\contentsline {figure}{\numberline {4.13}{\ignorespaces Prefect en la arquitectura del proyecto.}}{65}{figure.caption.39}%
+\contentsline {figure}{\numberline {4.14}{\ignorespaces Decoradores de Prefect en el código.}}{66}{figure.caption.40}%
+\contentsline {figure}{\numberline {4.15}{\ignorespaces Flow ejecutado con Prefect.}}{67}{figure.caption.41}%
+\contentsline {figure}{\numberline {4.16}{\ignorespaces Conceptos deployment, work-pool y worker de manera visual.}}{68}{figure.caption.42}%
+\contentsline {figure}{\numberline {4.17}{\ignorespaces Datos de testeo junto con las predicciones de cada modelo de Compras visualizado de una manera gráfica.}}{71}{figure.caption.44}%
+\contentsline {figure}{\numberline {4.18}{\ignorespaces Datos de testeo junto con las predicciones de cada modelo de Ventas visualizado de una manera gráfica.}}{73}{figure.caption.46}%
+\contentsline {figure}{\numberline {4.19}{\ignorespaces Arquitectura Azure.}}{74}{figure.caption.47}%
+\contentsline {figure}{\numberline {4.20}{\ignorespaces Contenido de Azure Blob Storage.}}{75}{figure.caption.48}%
+\contentsline {figure}{\numberline {4.21}{\ignorespaces Arquitectura pura de Azure.}}{76}{figure.caption.49}%
+\contentsline {figure}{\numberline {4.22}{\ignorespaces Configuración \emph {Datasets}.}}{76}{figure.caption.50}%
+\contentsline {figure}{\numberline {4.23}{\ignorespaces Mappeo entre origen y destino.}}{77}{figure.caption.51}%
+\contentsline {figure}{\numberline {4.24}{\ignorespaces Configuración de upsert con su respectiva columna ID.}}{77}{figure.caption.52}%
+\contentsline {figure}{\numberline {4.25}{\ignorespaces Esquema de la Copy Activity realizada.}}{78}{figure.caption.53}%
+\contentsline {figure}{\numberline {4.26}{\ignorespaces SQL Server endpoint.}}{78}{figure.caption.54}%
+\contentsline {figure}{\numberline {4.27}{\ignorespaces Última sección de la arquitectura del proyecto: Power BI.}}{79}{figure.caption.55}%
+\contentsline {figure}{\numberline {4.28}{\ignorespaces Esquema relacional Power BI.}}{80}{figure.caption.56}%
+\contentsline {figure}{\numberline {4.29}{\ignorespaces Política de configuración de actualización incremental.}}{81}{figure.caption.57}%
+\contentsline {figure}{\numberline {4.30}{\ignorespaces Pestaña General dashboard.}}{82}{figure.caption.58}%
+\contentsline {figure}{\numberline {4.31}{\ignorespaces Pestaña Cuentas dashboard.}}{83}{figure.caption.59}%
+\contentsline {figure}{\numberline {4.32}{\ignorespaces Pestaña Análisis dashboard.}}{84}{figure.caption.60}%
+\contentsline {figure}{\numberline {4.33}{\ignorespaces Pestaña Predicciones dashboard.}}{85}{figure.caption.61}%
+\contentsline {figure}{\numberline {4.34}{\ignorespaces Resultado final del proyecto en teléfono móvil personal.}}{86}{figure.caption.62}%
+\contentsline {figure}{\numberline {4.35}{\ignorespaces Gateways creadas en el servidor de Power BI.}}{87}{figure.caption.63}%
+\contentsline {figure}{\numberline {6.1}{\ignorespaces Ejemplo predicción intrapolar.}}{92}{figure.caption.65}%
+\contentsline {figure}{\numberline {6.2}{\ignorespaces Problema regresión lineal.}}{93}{figure.caption.66}%
+\contentsline {figure}{\numberline {6.3}{\ignorespaces Recta de regresión para distintos valores del parámetro $\theta $.}}{94}{figure.caption.67}%
+\contentsline {figure}{\numberline {6.4}{\ignorespaces Función de coste para distintos valores de $\theta $.}}{95}{figure.caption.68}%
+\contentsline {figure}{\numberline {6.5}{\ignorespaces Coste asociado a $\theta = 9$.}}{95}{figure.caption.69}%
+\contentsline {figure}{\numberline {6.6}{\ignorespaces Gradiente.}}{96}{figure.caption.70}%
+\contentsline {figure}{\numberline {6.7}{\ignorespaces Ejemplo de mala práctica: Learning rate $\alpha $}}{96}{figure.caption.71}%
+\contentsline {figure}{\numberline {6.8}{\ignorespaces Ejemplo de mala práctica: Learning rate $\alpha $ demasiado bajo.}}{97}{figure.caption.72}%
+\contentsline {figure}{\numberline {6.9}{\ignorespaces Ejemplo de un learning rate adecuado.}}{98}{figure.caption.73}%
+\contentsline {figure}{\numberline {6.10}{\ignorespaces Solución problema recta de regresión.}}{98}{figure.caption.74}%
+\contentsline {figure}{\numberline {6.11}{\ignorespaces Ejemplo de función no-convexa con las flechas indicando supuestos valores iniciales aleatorios de $\theta $.}}{100}{figure.caption.75}%
+\contentsline {figure}{\numberline {6.12}{\ignorespaces Six-Hump Camel function.}}{101}{figure.caption.76}%
+\contentsline {figure}{\numberline {6.13}{\ignorespaces Error-Varianza. \scriptsize {Fuente: \url {https://aprendeia.com/bias-y-varianza-en-machine-learning/}}}}{102}{figure.caption.77}%
+\contentsline {figure}{\numberline {6.14}{\ignorespaces Gráficas $|x|$ y $x^2$.}}{104}{figure.caption.78}%
+\contentsline {figure}{\numberline {6.15}{\ignorespaces Palabras representadas en vectores de tres dimensiones. Cada punto es el final del vector, i.e. cada palabra. \scriptsize {Fuente: \url {https://projector.tensorflow.org/}}}}{106}{figure.caption.79}%
+\contentsline {figure}{\numberline {6.16}{\ignorespaces Ejemplo, retención de memoria en texto. La palabra \emph {su} hace referencia a una palabra muy anterior a ella (\emph {chico}).}}{106}{figure.caption.80}%
+\contentsline {figure}{\numberline {6.17}{\ignorespaces Arquitectura del Transformer original. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{107}{figure.caption.81}%
+\contentsline {figure}{\numberline {6.18}{\ignorespaces Parte izquierda: embedding y encoding posicional. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{108}{figure.caption.82}%
+\contentsline {figure}{\numberline {6.19}{\ignorespaces Atención múltiple. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{110}{figure.caption.85}%
+\contentsline {figure}{\numberline {6.20}{\ignorespaces Ejemplo de \emph {self-attention} entre todas las palabras de una secuencia. Cuanto más oscuro es el color, más atención le presta una palabra a la correspondiente. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{112}{figure.caption.88}%
+\contentsline {figure}{\numberline {6.21}{\ignorespaces Visualización entre ángulo de vectores parejos (izquierda) y vectores disparejos (derecha).}}{112}{figure.caption.89}%
+\contentsline {figure}{\numberline {6.22}{\ignorespaces Ejemplo de atención múltiple.}}{114}{figure.caption.92}%
+\contentsline {figure}{\numberline {6.23}{\ignorespaces Atención llevada a más de una dimensionalidad. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{114}{figure.caption.93}%
+\contentsline {figure}{\numberline {6.24}{\ignorespaces Matriz final de atención.}}{115}{figure.caption.94}%
+\contentsline {figure}{\numberline {6.25}{\ignorespaces Ajuste de valores. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{115}{figure.caption.95}%
+\contentsline {figure}{\numberline {6.26}{\ignorespaces F\hspace {1pt}F\hspace {1pt}N. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{116}{figure.caption.96}%
+\contentsline {figure}{\numberline {6.27}{\ignorespaces Outputs. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{117}{figure.caption.97}%
+\contentsline {figure}{\numberline {6.28}{\ignorespaces Concatenación Decoder.}}{118}{figure.caption.98}%
+\contentsline {figure}{\numberline {6.29}{\ignorespaces Subcapa de enmascaramiento. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{119}{figure.caption.99}%
+\contentsline {figure}{\numberline {6.30}{\ignorespaces Atención Decoder. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{120}{figure.caption.100}%
+\contentsline {figure}{\numberline {6.31}{\ignorespaces Salida de Transformer. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {transformers}}}}{121}{figure.caption.101}%
+\contentsline {figure}{\numberline {6.32}{\ignorespaces Codificación completa del Informer. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {informer}}}}{122}{figure.caption.102}%
+\contentsline {figure}{\numberline {6.33}{\ignorespaces Ejemplo matriz de atención. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {rnnPlusAttention}}}}{123}{figure.caption.103}%
+\contentsline {figure}{\numberline {6.34}{\ignorespaces Distribución de las atenciones con forma de cola larga. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {informer}}}}{123}{figure.caption.104}%
+\contentsline {figure}{\numberline {6.35}{\ignorespaces Pseudo-código algoritmo ProbSparse. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {informer}}.}}{124}{figure.caption.105}%
+\contentsline {figure}{\numberline {6.36}{\ignorespaces Tabla comparativa Informer. \scriptsize {Fuente: \blx@tocontentsinit {0}\parencite {informer}}}}{125}{figure.caption.106}%

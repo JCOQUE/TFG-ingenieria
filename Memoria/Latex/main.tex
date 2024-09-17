@@ -75,6 +75,8 @@
         \definecolor{morados}{RGB}{115, 91, 251}
         \definecolor{moradmed}{RGB}{161, 144, 238}
         \definecolor{moradcl}{RGB}{228, 223, 252}
+        \definecolor{code}{RGB}{228, 229, 231}
+        \definecolor{blueLink}{RGB}{66, 111, 203}
 
 \usepackage{fancyhdr} % for cereating custom headers and footnotes
 	\fancypagestyle{plain}{ % este es un tipo de header y footer. Lo he llamado plain. 
@@ -97,8 +99,18 @@
 	% quieres utilizar distintos headers en distintas páginas
 
 \usepackage[hidelinks]{hyperref} %links: internal & external	
+    \hypersetup{ %for all kinds of links. It has more parameters but
+                 % we are just going to use the most basic ones
+        colorlinks = true,
+        linkcolor = black, % internal links
+        citecolor = black, % citation links
+        filecolor = black, % file links
+        %linkcolor = blue, % internal links
+        urlcolor = blueLink}
+        
 %\usepackage{setspace} %espaciado entre linesa
 	%\onehalfspacing
+    
 \renewcommand{\baselinestretch}{1.4}% Otra manera de poner espaciado entre líneas más precisa
 \usepackage{enumitem} %for lists
 
@@ -126,7 +138,7 @@
 
 
 
-
+\newcommand{\Code}[1]{\fcolorbox{code}{code}{#1}}
 \newcommand{\ho}{$H_0$}
 \newcommand{\ha}{$H_A$}
 \newcommand{\Int}[2]{\displaystyle \int_{#1}^{#2}}
@@ -157,6 +169,7 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Cov}{\mathrm{Cov}}
 \newcommand{\Corr}{\mathrm{Corr}}
+
 \renewcommand{\contentsname}{Tabla de contenidos}%cambiar titulo de \listofcontents (contents por defecto)
 \renewcommand{\listfigurename}{Lista de Figuras}
 \renewcommand{\listtablename}{Lista de Tablas}
@@ -336,6 +349,7 @@
 % al no tener título propio (section) no se podía modificar el heading
 % ABSTRACT
 
+
 \input{abstract}
 
 
@@ -356,19 +370,20 @@
 % SECCIŐN 3 - ASPECTOS METODOLÓGICOS
 \include{aspectos}
 
+
 % SECCIŐN 4 - DESARROLLO DEL TRABAJO
 \include{desarrollo}
-
 
 % SECCIŐN 5 - CONCLUSIONES
 \include{conclusiones}
 
 \include{apendice}
+
 %\clearpage
 %\thispagestyle{empty}
 %\printindex \nocite{*}
 %\appendix
-\include{borrar}
+
 
 % REFERENCIAS
 \newpage{\pagestyle{empty}}

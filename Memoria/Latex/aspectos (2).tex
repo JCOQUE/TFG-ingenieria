@@ -1,0 +1,77 @@
+\pagestyle{plain}
+	
+\section{Aspectos metodológicos}
+Las técnicas y metodologías aplicadas en este trabajo tienen su porqué. En este apartado se explicará, en primer lugar, las metodologías aplicadas y, posteriormente, el porqué se han elegido ciertas técnicas, procedimientos y metodologías en lugar de otras. El desarrollo de este trabajo tuvo una planificación y una selección de algoritmos previos a su realización. Las tecnologías, sin embargo, se fueron descubriendo a medida que se avanzaba en el desarrollo.
+
+\subsection{Metodología}
+Respecto a la metodología aplicada en este trabajo, debido a que se ha hecho en solitario, no se ha llevado a cabo ninguna metodología ni pautas a la hora de desarrollar el trabajo en concreto. Sin embargo, sí que se ha tratado de aplicar metodologías ágiles en la medida que se ha podido; concretamente \B{Scrum}. 
+
+Las metodologías ágiles vienen a sustituir a sus predecesoras: metodologías pesadas. Estas últimas dividían un proyecto software en distintas fases, y no se procedía  a la siguiente fase antes de acabar por completo la actual. Esto las convertía en metodologías muy rígidas y poco accesibles ante cambios ---algo muy común en proyectos software---. 
+
+Las metodologías ágiles, sin embargo, son todo lo contrario: están pensadas para que cambios en el proyecto supongan el menor inconveniente posible. Scrum concretamente, es una metodología que se basa en un desarrollo de software iterativo e incremental que utiliza ciclos de vida cortos llamados \ti{Sprints}. En ellos hay una reunión entre el equipo desarrollador y el cliente para \ti{feedback} y refinamiento, modificación o adición de requisitos. En el caso concreto de este trabajo, el autor era el ``desarrollador de software" y el tutor el ``cliente" quien aportaba opiniones y modificaciones en reuniones periódicas para el seguimiento del trabajo.
+
+\subsubsection{MLOps}
+Adicionalmente a Scrum, otra metodología incorporada en el trabajo ha sido \ti{Machine Learning Operations} (MLOps) para el entrenamiento, almacenamiento y seguimiento de los modelos generados, así como para la automatización de estos pasos recientemente mencionados. MLOps surge a partir de la idea de DevOps, una metodología de trabajo en proyectos software que mejora y agiliza la comunicación entre los equipos de \ti{Developers} y \ti{Operations} tratando de automatizar en la medida de lo posible distintas fases del ciclo de vida de un proyecto de software. De esta manera se consigue lo que muy comúnmente se conoce como \ti{Continuous Integration}/\ti{Continuous delivery} (CI/CD).
+
+MLOps, por tanto, algo más centrado el en campo aprendizaje automático, son prácticas que  facilitan el desarrollo, almacenamiento y monitoreo de modelos de aprendizaje automático en producción de  una manera eficiente y automatizada. Esto principalmente involucra el versionado de modelos, la monitorización del rendimiento y guardar aquella información relevante del modelo entrenado. Para conseguir esto, las dos herramientas fundamentales aplicadas en este trabajo han sido \B{Prefect} para la automatización y \B{Mlflow} para el almacenamiento de modelos, y versionado e información de estos. Estas herramientas son explicadas con más detalle en el siguiente apartado.
+\subsection{Técnicas aplicadas}
+Detrás de todo algoritmo de inteligencia artificial hay una componente matemática fundamental. Esta rama de la ciencia es tan amplia que puede dar soluciones con procedimientos distintos a un mismo problema. Por esto mismo no hay uno, sino varios algoritmos de aprendizaje automático a disposición del programador para poder ser aplicados al problema en cuestión. Esta variedad de posibles elecciones deja la puerta abierta a la selección de varios algoritmos y su posterior análisis y comparación. Por esto mismo se han elegido no uno, sino cuatro algoritmos de aprendizaje automático descritos en la sección anterior: XGBoost, LightGBM, TCN e Informer. 
+
+En primer lugar, las principales razones por la que se ha elegido XGBoost son por lo versátil que es; siendo un algoritmo válido para distintos problemas de aprendizaje supervisado, así como su popularidad en concursos de Kaggle \parencite{XGBoost}. Esto lo convirtió en un algoritmo muy atractivo de aprender y aplicar en este trabajo.
+
+LightGBM por otra parte, al ser un algoritmo que surge a raíz de mejorar la eficiencia de XGBoost \parencite{lightGBM}, se consideró oportuno una vez elegido aplicar XGBoost, aplicar también LightGBM. Como dos últimos algoritmos aplicados están TCN e Informer. Su característica común es que son redes neuronales, pero lo que los hace especiales ---y por lo que se ha decidido aplicarlos en este trabajo--- es que el primero es específico de series temporales y el segundo tiene la arquitectura de red neuronal más potente y llamativa que hay hasta día de hoy.
+
+
+\subsection{Tecnologías aplicadas}
+Para poder llevar a cabo el desarrollo de este trabajo, hay una serie de tecnologías que se han aplicado en este trabajo.
+
+\subsubsection{Entorno y librerías}
+El trabajo se ha desarrollado en un entorno virtual de Anaconda. La ventaja principal de crear un entorno virtual es que se instalan únicamente las librerías y dependencias necesarias para realizar la tarea que se quiera hacer. El lenguaje de programación junto con sus librerías y versiones son los siguientes:
+\begin{itemize}
+    \item Python 3.12.0
+    \item Pandas 2.2.2
+    \item Numpy 1.26.4
+    \item Matplotlib 3.8.4
+    \item Keras 3.3.3
+    \item Tensorflow 2.16.1
+    \item Torch 2.3.0
+    \item Darts 0.29.0
+    \item Xgboost 2.0.3
+    \item Lightgbm 4.3.0
+    \item Dagshub 0.3.27
+    \item Mlflow 2.12.2
+    \item Prefect 2.19.2
+    \item Azure-storage-blob 12.20.0
+\end{itemize}
+
+\subsubsection{Herramientas Software empleadas}
+Las herramientas software, además del entorno virtual y sus librerías aplicadas en el trabajo son las siguientes:
+
+\subsubsubsection{Git y Github}
+Se tratan de dos herramientas software muy comunes en cualquier ámbito del software. Su principal objetivo es tener un control de las versiones de un proyecto de software, siendo pues, fundamentales a lo largo del ciclo de vida de este.
+
+\subsubsubsection{Mlflow}
+Esta herramienta es utilizada en ámbitos de inteligencia artificial y permite llevar un seguimiento de los distintos modelos generados a lo largo del tiempo. Contribuye a hacer unas buenas prácticas de MLOps, en donde se tiene un seguimiento constante de todos los modelos generados, con cualquier información que se pueda considerar relevante acerca de estos como pueden ser sus parámetros, métricas obtenidas y casi cualquier información adicional, e.g. una gráfica de su entrenamiento. Todo esto, Mlflow lo organiza en lo que él llama ``experimentos".
+
+\subsubsubsection{Dagshub}
+Dagshub es un proyecto de software que tiene como objetivo hacer la vida más fácil a los desarrolladores de inteligencia artificial. Se trata de un repositorio, similar a Github, pero enfocado en datos, permitiendo a sus colaboradores hacer versionado de modelos, compararlos y guardar ahí los experimentos de Mlflow.
+
+\subsubsubsection{Prefect}
+Prefect es una herramienta para la automatización y orquestación de flujos de trabajo. De manera simple, se puede ver como un \ti{cron job} para ejecutar código de manera automatizada, pero es mucho más potente. Se pueden determinar parámetros de entrada para estos archivos de código, además de que no están restringidos a tener que estar en el ordenador propio, sino que pueden estar alojados en un repositorio Github ---como ha sido el caso de este trabajo--- o en algún servicio en la nube. Dos características adicionales y fundamentales de Prefect es que se puede decidir dónde ejecutar el código y llevar un seguimiento de esta ejecución. Es decir, saber si ha fallado, en qué momento ha fallado y el porqué. 
+
+Otra herramienta que se estudió aplicar, complementaria a Prefect, es Airflow. Esta herramienta es mucho más potente y mucho más compleja con funcionalidades que Prefect no tiene. Pero, para lo necesario de este trabajo, Prefect era suficiente.
+
+\subsubsubsection{Power BI}
+Como herramienta de visualización de datos se optó por elegir Power BI. Se trata de una herramienta de Microsoft para poder crear gráficos interactivos de una manera simple desde casi cualquier fuente de datos. 
+
+Otra herramienta muy conocida y que se contempló utilizar para este trabajo fue Tableau. Se descartó sin ninguna razón en concreto; no se conocía ninguna de las dos herramientas con anterioridad y se eligió Power BI.
+
+\subsubsubsection{Azure}
+Para el almacenamiento de los datos se ha utilizado la nube de Azure Microsoft. Concretamente, se han empleado los servicios de:
+\begin{itemize}
+    \item \B{Azure Blob Storage}: Se trata de una \ti{datalake} en donde se almacenan dos archivos: un \fcolorbox{code}{code}{.csv} con los datos en "crudo" y un \fcolorbox{code}{code}{.parquet} con los datos transformados y con las respectivas predicciones hechas.
+    \item \B{Azure SQL Database}: Esta es la base de datos SQL de donde Power BI leerá los datos. Asimismo, esta base de datos está gestionada con Azure SQL Server y con la herramienta SQL Server Management Studio (SSMS).
+    \item \B{Azure Data Factory}: Se utiliza para crear, programar y orquestar flujos de trabajo de datos. Permite a los usuarios mover y transformar datos de diversas fuentes a diferentes destinos, facilitando la creación de \ti{pipelines} de datos que pueden automatizar los procesos de ETL (Extracción, Transformación y Carga). Para este trabajo en concreto, se utiliza para mover los dates de Azure Blob Storage a Azure SQL Database.
+\end{itemize}
+
+Para poder visualizar mejor la arquitectura del trabajo y cómo estas herramientas están conectadas entre sí, véase la Figura \ref{arquitectura}.

@@ -1,0 +1,1 @@
+Estas son las cosas que tienen que ver con el TFG de ingeniería de software pero que no quiero que estén en el repositorio.

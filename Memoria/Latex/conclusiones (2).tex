@@ -1,0 +1,18 @@
+\section{Conclusiones} 
+ 
+Este trabajo principalmente tenía como objetivo crear un \ti{dashboard} en el que se pudieran visualizar, analizar y comparar datos contables. Como se ha mostrado en el apartado \ref{resFinal}, se ha desarrollado este \ti{dashboard} que se comenta, en Power BI, con cuatro pestañas; cada una mostrando una información relevante distinta.
+
+Además del \ti{dashboard} en sí, el trabajo contaba con algunos objetivos adicionales que tenían en cuenta tanto el \ti{dashboard}, como procesos previos a la hora de realizar las visualizaciones. En  primer lugar, el proceso desde que se recogen y procesan los datos hasta que llegan a Power BI es totalmente automatizado; con una arquitectura compleja teniendo en cuenta siempre que se trabaja con una gran cantidad de datos. Un ejemplo de ello es la automatización incremental en Power BI explicado en la sección anterior.
+
+ 
+En segundo lugar, los datos se guardan de manera segura en la nube y no en local; siendo accesibles desde cualquier lugar del mundo con acceso a los datos. Por otra parte, el \ti{dashboard} no solo está también publicado en un servidor de Power BI en la nube, siendo accesible desde internet, sino que también se ha ido más allá y se ha añadido una funcionalidad adicional a lo propuesto en un principio: la opción de poder visualizar el \ti{dashboard} desde el teléfono móvil implicando un diseño especial para este tipo de dispositivo. De esta manera se consigue que el producto final no solo sea accesible desde cualquier parte del mundo, sino que también no haga falta ni un ordenador para poder verlo: si se necesitase verlo, por alguna urgencia, en un ámbito sin ordenador, se puede ver desde el móvil. 
+
+Por último, el \ti{dashboard} no solo muestra datos ya existentes, sino que también se pueden visualizar estimaciones futuras en su pestaña correspondiente. Estas predicciones, al haber involucrado MLOps, se asegura que siempre sean las más actualizadas posibles.
+
+Como líneas futuras a este trabajo, estaría bien tener un servidor con capacidad masiva de entrenamiento de modelos de aprendizaje automático. En este trabajo se ha utilizado el ordenador propio por no tener otra opción; lo cual ha resultado una limitación a la hora de entrenar y comparar modelos. Así como para realizar estimaciones futuras entre los distintos algoritmos.
+
+Respecto a esto último, una comparativa de modelos más rigurosa, con más modelos y más métricas hubiera sido ideal, pero este tema iba más allá de este trabajo pues llevaría meses poder hacerlo de bien de manera correcta. Por ejemplo, sería de gran utilidad incorporar gráficas con el valor de las métricas a lo largo del entrenamiento; de esta manera se podría ver mejor si llegado a cierto punto, el modelo de aprender. 
+
+Por otro lado, debido a la facilidad que ofrece Power BI a la hora de importar nuevas tablas y relacionarlas de una manera sencilla, estaría interesante poder utilizar más fuentes de datos y tratar de mostrarlos con los que ya se tienen para conseguir conocimiento incluso mayor de la empresa.
+
+También, en caso de que la cantidad de datos o complejidad del proyecto aumentase, sería interesante estudiar herramientas alternativas a las que se ha usado un poco más potentes como puede ser Airflow en lugar de Prefect. Para terminar, aunque no se haya profundizado mucho en Dagshub, esta herramienta es, por lo visto, una herramienta muy potente para combinarla con Mlflow. Para los objetivos que se habían planteado en un principio, la utilidad que se le ha dado a Dagshub es más que suficiente, pero se espera estudiar algo más en profundidad esta herramienta y ver cómo puede llevar este trabajo a un escalón incluso superior.

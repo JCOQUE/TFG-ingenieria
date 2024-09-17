@@ -1,0 +1,23 @@
+[0] Config.pm:307> INFO - This is Biber 2.19
+[0] Config.pm:310> INFO - Logfile is 'main.blg'
+[184] biber-MSWIN64:340> INFO - === 
+[227] Biber.pm:419> INFO - Reading 'main.bcf'
+[480] Biber.pm:979> INFO - Found 80 citekeys in bib section 0
+[505] Biber.pm:4419> INFO - Processing section 0
+[518] Biber.pm:4610> INFO - Looking for bibtex file 'biblio.bib' for section 0
+[583] bibtex.pm:1713> INFO - LaTeX decoding ...
+[768] bibtex.pm:1519> INFO - Found BibTeX data source 'biblio.bib'
+[1352] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1352] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1352] Biber.pm:4239> INFO - Sorting list 'apa/apasortcite//global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[1353] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[1556] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'normalization = NFD' with 'normalization = prenormalized'
+[1556] UCollate.pm:68> INFO - Overriding locale 'en-US' defaults 'variable = shifted' with 'variable = non-ignorable'
+[1556] Biber.pm:4239> INFO - Sorting list 'apa/global//global/global' of type 'entry' with template 'apa' and locale 'en-US'
+[1556] Biber.pm:4245> INFO - No sort tailoring available for locale 'en-US'
+[1690] bbl.pm:660> INFO - Writing 'main.bbl' with encoding 'UTF-8'
+[1806] bbl.pm:763> INFO - Output to main.bbl
+[1807] Biber.pm:131> WARN - legacy month field 'January 2' in entry 'occam' is not an integer - this will probably not sort properly.
+[1807] Biber.pm:131> WARN - legacy year field 'n.d.' in entry 'KL' is not an integer - this will probably not sort properly.
+[1807] Biber.pm:131> WARN - BibTeX subsystem: C:\Users\jcoqu\AppData\Local\Temp\biber_tmp_iPie\a9e03cb3043b9e2c02591da84105bb68_5920.utf8, line 504, warning: 2 characters of junk seen at toplevel
+[1807] Biber.pm:133> INFO - WARNINGS: 3
