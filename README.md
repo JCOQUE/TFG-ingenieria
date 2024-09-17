@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="Memoria/imgs/Arquitectura.png" alt="Prefect deployment" style = "width:50%;">
+  <img src="Memoria/Latex/imgs/Arquitectura.png" alt="Prefect deployment" style = "width:50%;">
 </p>
 
 Welcome to my final major project :)
